@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Dein eigener mobiler Fahrradservice. Persönliche Marke, Website und digitale Organisation für Fahrradprofis."
+    />
+    <meta name="theme-color" content="#f8f4eb" />
+    <meta name="speech-mode" content="static" />
+    <title>Dein Können. Dein Name. Dein mobiler Fahrradservice.</title>
+    <link
+      rel="preload"
+      href="assets/fonts/nunito-sans-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Zum Inhalt</a>
+    <svg
+      class="svg-library"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <defs>
+        <symbol id="bike" viewBox="0 0 122 62">
+          <title>Frontloader-Lastenrad</title>
+          <g
+            stroke="#303e36"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+          >
+            <g transform="translate(-1.05 -8.99)">
+              <!-- Tieflader-->
+              <circle cx="14.163" cy="57.139" r="10.364" fill="none" />
+              <circle r="14.31" cy="52.986" cx="106.12" fill="none" />
+              <path
+                d="M89.545 21.094l-10.428 33.61m-14.13-37.51L60.53 19.36l-.16 36.74"
+                fill="none"
+              />
+              <path
+                d="M93.585 21.41l-8.355-.033"
+                fill="none"
+                stroke-width="2"
+              />
+              <path
+                d="M60.467 37.25v19.134l-27.92.89-14.24-18.836z"
+                fill="#e99670"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M19.222 33.43L14.36 57.3m46.112-24.34l25.175-.277 20.203 20.514-45.383 3.187m-44.005-6.917l2.167 4.455 41.78-1.618"
+                fill="none"
+              />
+            </g>
+          </g>
+        </symbol>
+        <symbol id="tom" viewBox="0 0 240 310">
+          <ellipse
+            cx="120"
+            cy="290"
+            rx="76"
+            ry="10"
+            fill="#283c32"
+            opacity=".1"
+          />
+          <path d="M70 212 63 285h42l14-67 13 67h43l-7-75" fill="#314b45" />
+          <path d="M71 132q49-31 98 0l15 90H56z" fill="#739bab" />
+          <path d="M89 119h63v103H84z" fill="#2f4941" />
+          <rect x="103" y="162" width="32" height="26" rx="4" fill="#779783" />
+          <path
+            d="M74 145q-32 29-25 54m119-54q29 12 33 49"
+            fill="none"
+            stroke="#d68d65"
+            stroke-width="22"
+            stroke-linecap="round"
+          />
+          <path d="M106 104h28v31h-28" fill="#d68d65" />
+          <ellipse cx="120" cy="77" rx="42" ry="46" fill="#e8a278" />
+          <path
+            d="M78 72q-5-57 48-51 41 4 39 52l-14-26q-35 15-62 0z"
+            fill="#343b32"
+          />
+          <path
+            d="M82 87q9 47 38 41 29 4 38-41-10 26-38 14-27 13-38-14"
+            fill="#343b32"
+          />
+          <g fill="#303c37">
+            <circle cx="105" cy="75" r="3" />
+            <circle cx="136" cy="75" r="3" />
+          </g>
+          <path
+            d="M112 94q10 8 20 0"
+            fill="none"
+            stroke="#faf4e8"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <path
+            d="m195 198-14-32m-4-17 16 7-3 14-14-6-8-10z"
+            fill="#d5d9cd"
+            stroke="#303c37"
+            stroke-width="3"
+          />
+        </symbol>
+        <symbol id="customer" viewBox="0 0 220 300">
+          <ellipse
+            cx="111"
+            cy="282"
+            rx="70"
+            ry="9"
+            fill="#283c32"
+            opacity=".1"
+          />
+          <path d="m73 204-10 74h41l10-60 16 60h40l-20-74" fill="#728f9e" />
+          <path d="M70 127q42-22 81 0l22 90H56z" fill="#e8885f" />
+          <path
+            d="M72 141q-24 26-22 48m101-48q19 7 39-16"
+            stroke="#e5b18a"
+            stroke-width="21"
+            fill="none"
+            stroke-linecap="round"
+          />
+          <rect x="179" y="99" width="22" height="38" rx="5" fill="#314b45" />
+          <path d="M100 105v29h25v-29" fill="#e5b18a" />
+          <ellipse cx="110" cy="78" rx="39" ry="44" fill="#e5b18a" />
+          <path
+            d="M69 83q-8-65 47-60 42 5 35 72l-14-49q-36 15-61 14z"
+            fill="#784b37"
+          />
+          <g fill="#303c37">
+            <circle cx="96" cy="80" r="3" />
+            <circle cx="122" cy="80" r="3" />
+          </g>
+          <path
+            d="M102 99q7-5 15 0"
+            fill="none"
+            stroke="#784b37"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+        </symbol>
+        <symbol id="helper" viewBox="0 0 120 130">
+          <path
+            d="M13 66Q4 15 58 13q62-1 49 60-4 40-48 38Q19 107 13 66"
+            fill="#ef9a70"
+          />
+          <path
+            d="M25 49q2-38 69-15m-79 29v18m91-18v18"
+            stroke="#35473e"
+            stroke-width="7"
+            fill="none"
+            stroke-linecap="round"
+          />
+          <circle cx="43" cy="64" r="4" fill="#35473e" />
+          <circle cx="77" cy="64" r="4" fill="#35473e" />
+          <path
+            d="M47 81q13 13 27 0m32-6q3 20-25 20"
+            fill="none"
+            stroke="#35473e"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="m34 106-5 12m51-12 8 12"
+            stroke="#35473e"
+            stroke-width="6"
+            stroke-linecap="round"
+          />
+        </symbol>
+      </defs>
+    </svg>
+    <header class="header">
+      <a class="brand" href="#top"
+        ><span class="brand-icon">↗</span> Dein Fahrradservice</a
+      >
+      <nav aria-label="Hauptnavigation">
+        <a href="#geschichte">Der Ablauf</a><a href="#paket">Dein Paket</a
+        ><a class="nav-button" href="#kennenlernen">Kennenlernen ↗</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">Für Fahrradprofis mit eigenen Plänen</p>
+          <h1>
+            Dein Können.<br />Dein Name.<br /><span
+              >Dein mobiler<br />Fahrradservice.</span
+            >
+          </h1>
+          <p class="lead">
+            Du bringst Fahrräder wieder ins Rollen. Wir helfen dir, mit deinem
+            eigenen mobilen Service loszulegen — persönlich eingerichtet,
+            passend zu dir.
+          </p>
+          <a class="button primary" href="#geschichte"
+            >Einen Auftrag erleben <span>↓</span></a
+          >
+        </div>
+        <div
+          class="hero-art"
+          aria-label="Illustration: ein Fahrradprofi mit seinem Fahrrad und einem kleinen organisatorischen Assistenten"
+        >
+          <div class="sun"></div>
+          <div class="art-note">
+            Du bringst das Können.<br /><strong>Wir den Rückenwind.</strong
+            ><svg viewBox="0 0 130 60" aria-hidden="true">
+              <path d="M8 10q20 40 99 28m-14-9 14 9-12 9" />
+            </svg>
+          </div>
+          <svg class="hero-tom"><use href="#tom" /></svg
+          ><svg class="hero-bike"><use href="#bike" /></svg>
+          <div class="helper-intro">
+            <svg><use href="#helper" /></svg
+            ><span>Ich halte dir<br />die Hände frei.</span>
+          </div>
+          <span class="art-spark spark-one">✳</span
+          ><span class="art-spark spark-two">✳</span>
+        </div>
+      </section>
+      <section class="story-intro" id="geschichte">
+        <p class="eyebrow">So fühlt sich dein Service für Kunden an</p>
+        <h2>Ein kaputtes Rad.<br /><span>Ein guter Draht.</span></h2>
+        <p>
+          Begleite einen Auftrag bei
+          <strong>KetttenRetter Tom</strong>.<br />Ein erfundener
+          Beispielbetrieb. Der Ablauf zum Ausprobieren.
+        </p>
+      </section>
+      <div class="story" id="story">
+        <svg class="story-thread" aria-hidden="true">
+          <path id="thread-path" />
+        </svg>
+        <section class="story-row problem-row" id="problem">
+          <div class="story-cell left">
+            <p class="step-label" data-thread="left">
+              01 · Das Rad steht still
+            </p>
+            <h3>„Und jetzt?“</h3>
+            <div class="thoughts">
+              <p>Wie bringe ich das schwere Lastenrad zur Werkstatt?</p>
+              <p>Wie lange ist es weg?</p>
+              <p>Wann bekomme ich Rückmeldung?</p>
+            </div>
+            <svg class="customer-figure" aria-label="Illustrierte Kundin">
+              <use href="#customer" />
+            </svg>
+          </div>
+        </section>
+        <section class="story-row intake-row" id="demo">
+          <div class="story-cell left">
+            <p class="step-label" data-thread="left">
+              02 · Persönliche Hilfe finden
+            </p>
+            <h3>„Ah, KetttenRetter Tom!“</h3>
+            <div class="iphone">
+              <div class="phone-display">
+                <div class="phone-hardware">
+                  <span>9:41</span><i class="island"></i
+                  ><span class="phone-signal" aria-hidden="true"
+                    ><svg viewBox="0 0 56 16">
+                      <path
+                        d="M1 13V10h3v3zM6 13V7h3v6zM11 13V4h3v9zM16 13V1h3v12z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M24 5q6-6 12 0m-10 3q4-4 8 0m-6 3q2-2 4 0"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                      />
+                      <rect
+                        x="40"
+                        y="3"
+                        width="13"
+                        height="10"
+                        rx="2"
+                        fill="none"
+                        stroke="currentColor"
+                      />
+                      <rect
+                        x="42"
+                        y="5"
+                        width="9"
+                        height="6"
+                        rx="1"
+                        fill="currentColor"
+                      />
+                      <path d="M55 6v4" stroke="currentColor" /></svg
+                  ></span>
+                </div>
+                <div class="phone-browser">
+                  <span aria-hidden="true">aA</span
+                  ><span>ketttenretter-tom.example</span
+                  ><span aria-hidden="true">↻</span>
+                </div>
+                <div class="phone-screen">
+                  <div class="tom-brand">
+                    KetttenRetter <strong>tom.</strong
+                    ><span>Beispielbetrieb</span>
+                  </div>
+                  <div id="personal-home">
+                    <div class="portrait">
+                      <svg><use href="#tom" /></svg
+                      ><span>Tom · dein Fahrradmechaniker</span
+                      ><i>Servus, ich bin Tom.</i>
+                    </div>
+                    <div class="personal-copy">
+                      <h4>Dein Rad braucht Hilfe?<br />Ich komme zu dir.</h4>
+                      <p>
+                        Reifen, Bremsen und Service für Lastenräder, E-Bikes und
+                        Fahrräder.
+                      </p>
+                      <div class="service-tags">
+                        <span>Innsbruck & Umgebung</span
+                        ><span>Persönlich vor Ort</span>
+                      </div>
+                      <button class="button primary" id="open-request">
+                        Reparatur anfragen →
+                      </button>
+                      <p class="tiny">
+                        Preis und Reparaturumfang stimmen wir vorher ab.
+                      </p>
+                    </div>
+                  </div>
+                  <div id="intake" hidden>
+                    <div
+                      class="channel-switch"
+                      role="group"
+                      aria-label="Kontaktweg"
+                    >
+                      <button data-channel="website" aria-pressed="true">
+                        Website</button
+                      ><button data-channel="phone" aria-pressed="false">
+                        Telefon
+                      </button>
+                    </div>
+                    <div id="web-intake">
+                      <div
+                        class="form-progress"
+                        aria-label="Formularfortschritt"
+                      >
+                        <span class="active">1 · Rad</span><span>2 · Ort</span
+                        ><span>3 · Zeit</span>
+                      </div>
+                      <form id="request-form">
+                        <div class="form-step" data-step="1">
+                          <h4>Was braucht dein Rad?</h4>
+                          <label for="bike-input">Fahrrad</label
+                          ><select id="bike-input" name="bike">
+                            <option>Lastenrad</option>
+                            <option>E-Bike</option>
+                            <option>Fahrrad</option></select
+                          ><label for="issue-input">Problem</label
+                          ><select id="issue-input" name="issue">
+                            <option>Platter Reifen</option>
+                            <option>Bremse schleift</option>
+                            <option>Schaltung hakt</option>
+                            <option>Service & Check</option></select
+                          ><label for="photo-input"
+                            >Foto hinzufügen
+                            <span class="optional">optional</span></label
+                          ><input
+                            type="file"
+                            id="photo-input"
+                            accept="image/jpeg,image/png,image/webp"
+                          />
+                          <p id="photo-status" class="tiny" role="status"></p>
+                          <img
+                            id="photo-preview"
+                            alt="Vorschau des gewählten Beispielfotos"
+                            hidden
+                          /><button
+                            type="button"
+                            class="button primary next"
+                            data-next="2"
+                          >
+                            Weiter zum Standort →
+                          </button>
+                        </div>
+                        <div class="form-step" data-step="2" hidden>
+                          <h4>Wo steht das Fahrrad?</h4>
+                          <label for="location-input"
+                            >Ort oder Postleitzahl</label
+                          ><input
+                            id="location-input"
+                            name="location"
+                            value="6020 Innsbruck, am Marktplatz"
+                            maxlength="140"
+                            required
+                          /><button
+                            type="button"
+                            class="button secondary"
+                            id="geolocate"
+                          >
+                            ⌖ Meinen Standort verwenden
+                          </button>
+
+                          <p id="geo-status" class="tiny" role="status"></p>
+                          <div id="location-map"></div>
+                          <div class="form-buttons">
+                            <button
+                              type="button"
+                              class="button subtle"
+                              data-next="1"
+                            >
+                              ← Zurück</button
+                            ><button
+                              type="button"
+                              class="button primary next"
+                              data-next="3"
+                            >
+                              Weiter →
+                            </button>
+                          </div>
+                        </div>
+                        <div class="form-step" data-step="3" hidden>
+                          <h4>Wann passt es dir?</h4>
+                          <label for="time-input">Gewünschter Zeitpunkt</label
+                          ><select id="time-input" name="time">
+                            <option>Heute, wenn möglich</option>
+                            <option>Dienstag, 15–17 Uhr</option>
+                            <option>Mittwoch, 15–17 Uhr</option>
+                            <option>Donnerstag, 15–17 Uhr</option>
+                            <option>Nach Absprache</option></select
+                          ><label for="phone-input">Telefonnummer</label
+                          ><input
+                            id="phone-input"
+                            name="phone"
+                            value="+1 202 555 0123"
+                            maxlength="30"
+                            pattern="\+1 202 555 01[0-9]{2}"
+                            required
+                            aria-describedby="phone-hint"
+                          />
+                          <p class="tiny" id="phone-hint"></p>
+                          <p class="tiny">
+                            Nur Beispieldaten verwenden.
+                          </p>
+                          <div class="form-buttons">
+                            <button
+                              type="button"
+                              class="button subtle"
+                              data-next="2"
+                            >
+                              ← Zurück</button
+                            ><button class="button primary" type="submit">
+                              Anfrage senden →
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div id="phone-intake" hidden>
+                      <div class="phone-assistant">
+                        <svg><use href="#helper" /></svg>
+                        <h4>„Servus! Was fehlt deinem Rad?“</h4>
+                      </div>
+                      <p class="tiny">Beispielgespräch</p>
+                      <div class="conversation">
+                        <p><b>Assistent</b> Was für ein Fahrrad hast du?</p>
+                        <p class="caller">
+                          <b>Kundin</b> Ein Lastenrad. Der Reifen ist platt.
+                        </p>
+                        <p><b>Assistent</b> Wo steht es und wann passt es?</p>
+                        <p class="caller">
+                          <b>Kundin</b> Am Marktplatz in Innsbruck. Heute, wenn
+                          möglich.
+                        </p>
+                        <p>
+                          <b>Assistent</b> Alles klar. Tom schaut sich deine
+                          Anfrage an und du bekommst einen Rückruf.
+                        </p>
+                      </div>
+                      <button class="button primary" id="send-phone">
+                        Gespräch an Tom übergeben →
+                      </button>
+                    </div>
+                  </div>
+                  <div id="intake-receipt" hidden>
+                    <div class="receipt-check">✓</div>
+                    <h4>Anfrage bei Tom.</h4>
+                    <p>
+                      Er entscheidet, ob und wann er helfen kann. Du bekommst
+                      einen Rückruf.
+                    </p>
+                    <a class="button primary" href="#entscheidung"
+                      >Zu Toms Handy ↓</a
+                    ><button class="button subtle" data-reset>
+                      Neu starten
+                    </button>
+                  </div>
+                </div>
+                <div class="safari-tools" aria-hidden="true">
+                  <svg class="safari-icon" viewBox="0 0 24 24">
+                    <path d="M14 4 6 12l8 8" /></svg
+                  ><svg class="safari-icon" viewBox="0 0 24 24">
+                    <path d="M10 4l8 8-8 8" /></svg
+                  ><svg class="safari-icon" viewBox="0 0 24 24">
+                    <path d="M8 9H5v12h14V9h-3M12 15V2m-4 4 4-4 4 4" /></svg
+                  ><svg class="safari-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M12 5Q7 2 3 4v16q5-2 9 1 4-3 9-1V4q-4-2-9 1v16"
+                    /></svg
+                  ><svg class="safari-icon" viewBox="0 0 24 24">
+                    <path d="M8 3h12v13H8zM5 8H3v13h13v-2" />
+                  </svg>
+                </div>
+                <div class="home-indicator" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+          <div class="story-cell right brand-explanation">
+            <p class="eyebrow">Dein Auftritt, persönlich eingerichtet</p>
+            <h3>Dein Name<br />an der Klingel.</h3>
+            <p>
+              Wir gestalten deine Marke und Website um dich: dein Gesicht, deine
+              Leistungen, dein Einsatzgebiet.
+            </p>
+            <ul class="simple-list">
+              <li>Du bestimmst deine Preise.</li>
+              <li>Die Kundenbeziehung gehört dir.</li>
+              <li>Du entscheidest über jeden Auftrag.</li>
+            </ul>
+            <div class="helper-note">
+              <svg><use href="#helper" /></svg>
+              <p>
+                Ich sammle die Angaben.<br /><strong>Du bleibst am Rad.</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+        <section class="story-row decision-row" id="entscheidung">
+          <div class="story-cell left decision-copy">
+            <p class="eyebrow">Website oder Telefon</p>
+            <h3>Alles da.<br />Ohne Nachfragen.</h3>
+            <p>
+              Fahrrad, Problem, Ort und Terminwunsch landen in derselben
+              Übersicht. Ein Foto kommt mit, wenn die Kundin eins ergänzt hat.
+            </p>
+            <span class="integration"
+              ><span class="telegram-icon">➤</span> Telegram · Anfrage auf dein
+              Handy</span
+            >
+          </div>
+          <div class="story-cell right">
+            <p class="step-label" data-thread="right">03 · Du entscheidest</p>
+            <div class="iphone telegram-phone">
+              <div class="phone-display">
+                <div class="phone-hardware">
+                  <span>9:41</span><i class="island"></i
+                  ><span class="phone-signal" aria-hidden="true"
+                    ><svg viewBox="0 0 56 16">
+                      <path
+                        d="M1 13V10h3v3zM6 13V7h3v6zM11 13V4h3v9zM16 13V1h3v12z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M24 5q6-6 12 0m-10 3q4-4 8 0m-6 3q2-2 4 0"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                      />
+                      <rect
+                        x="40"
+                        y="3"
+                        width="13"
+                        height="10"
+                        rx="2"
+                        fill="none"
+                        stroke="currentColor"
+                      />
+                      <rect
+                        x="42"
+                        y="5"
+                        width="9"
+                        height="6"
+                        rx="1"
+                        fill="currentColor"
+                      />
+                      <path d="M55 6v4" stroke="currentColor" /></svg
+                  ></span>
+                </div>
+                <div class="telegram-shell">
+                  <div class="telegram-header">
+                    <span class="telegram-icon">➤</span>
+                    <div><b>Toms Werkstatthelfer</b><small>Bot</small></div>
+                    <span>•••</span>
+                  </div>
+                  <div class="telegram-body">
+                    <div class="telegram-message">
+                      <div class="message-meta">
+                        <b id="order-status">Reparaturanfrage</b
+                        ><span id="source-label">Website</span>
+                      </div>
+                      <h4 id="summary-title">Lastenrad · Platter Reifen</h4>
+                      <dl>
+                        <dt>Standort</dt>
+                        <dd id="summary-location">
+                          6020 Innsbruck, am Marktplatz
+                        </dd>
+                        <dt>Zeitwunsch</dt>
+                        <dd id="summary-time">Heute, wenn möglich</dd>
+                        <dt>Rückruf</dt>
+                        <dd id="summary-phone">+1 202 555 0123</dd>
+                      </dl>
+                      <div id="summary-map"></div>
+                      <img
+                        id="summary-photo"
+                        alt="Beispielfoto der Anfrage"
+                        hidden
+                      />
+                      <p id="summary-photo-text" class="tiny">
+                        Kein Foto ergänzt
+                      </p>
+                    </div>
+                    <div class="operator-actions">
+                      <button data-action="assistant">
+                        Annehmen · Assistent gibt Bescheid</button
+                      ><button data-action="personal">
+                        Annehmen · selbst anrufen</button
+                      ><button data-action="schedule">
+                        Andere Termine anbieten</button
+                      ><button data-action="reject" class="reject">
+                        Anfrage ablehnen
+                      </button>
+                    </div>
+                    <div id="operator-result" role="status"></div>
+                    <form id="offer-form" hidden>
+                      <p><b>Welche Zeiten möchtest du anbieten?</b></p>
+                      <label class="check-label"
+                        ><input
+                          type="checkbox"
+                          name="slots"
+                          value="Dienstag, 15:00 Uhr"
+                          checked
+                        />Dienstag, 15:00 Uhr</label
+                      ><label class="check-label"
+                        ><input
+                          type="checkbox"
+                          name="slots"
+                          value="Mittwoch, 16:00 Uhr"
+                          checked
+                        />Mittwoch, 16:00 Uhr</label
+                      ><label class="check-label"
+                        ><input
+                          type="checkbox"
+                          name="slots"
+                          value="Donnerstag, 15:30 Uhr"
+                        />Donnerstag, 15:30 Uhr</label
+                      >
+                      <p id="offer-error" role="status"></p>
+                      <button class="button primary">
+                        Termine per Rückruf anbieten →
+                      </button>
+                    </form>
+                    <a
+                      class="button secondary"
+                      href="#rueckruf"
+                      id="to-callback"
+                      hidden
+                      >Rückmeldung ansehen ↓</a
+                    >
+                  </div>
+                </div>
+                <div class="telegram-compose" aria-hidden="true">
+                  <span>＋</span><span>Nachricht</span><span>♩</span>
+                </div>
+                <div class="home-indicator" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="story-row callback-row" id="rueckruf">
+          <div class="story-cell left">
+            <p class="step-label" data-thread="left">04 · Der Rückruf</p>
+            <h3>„Mein Telefon klingelt.“</h3>
+            <div class="callback-card">
+              <div id="callback-idle"></div>
+              <div id="callback-live" hidden>
+                <div class="call-identity">
+                  <svg id="callback-avatar"><use href="#helper" /></svg>
+                  <div>
+                    <h4 id="callback-title">Dein Assistent ruft zurück</h4>
+                    <p id="callback-number">+1 202 555 0123</p>
+                  </div>
+                </div>
+                <p id="callback-transcript"></p>
+                <div id="voice-player" hidden>
+                  <button class="button primary" id="play-callback">
+                    ▶ Rückruf anhören</button
+                  ><audio
+                    id="callback-audio"
+                    src="assets/callback-dialogue.mp3"
+                    preload="none"
+                  ></audio>
+                  <p id="audio-status" class="tiny" role="status"></p>
+                  <details>
+                    <summary>Mitlesen</summary>
+                    <p class="tiny">
+                      Gespräch mit zwei Stimmen: Assistent und Kundin.
+                    </p>
+                    <p>
+                      Assistent: Tom kann am Dienstag um fünfzehn Uhr zu dir
+                      kommen. Passt das für dich? Kundin: Ja, das passt.
+                      Assistent: Danke! Du bekommst eine Terminbestätigung per
+                      SMS und eine Erinnerung eine Stunde vorher. Bis bald!
+                    </p>
+                  </details>
+                </div>
+                <div id="personal-call" hidden>
+                  <span class="call-pulse">☎</span
+                  ><button class="button primary" id="answer-call">
+                    Anruf annehmen
+                  </button>
+                </div>
+                <form id="choose-slot" hidden>
+                  <fieldset>
+                    <legend>Welcher Termin passt?</legend>
+                    <div id="slot-options"></div>
+                  </fieldset>
+                  <p id="slot-error" role="status"></p>
+                  <button class="button primary">Termin bestätigen ✓</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="story-cell right calendar-side">
+            <div class="calendar-booking">
+              <div class="calendar-booking-header">
+                <span class="calendar-date" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" fill="none">
+                    <rect
+                      x="6"
+                      y="9"
+                      width="45"
+                      height="45"
+                      rx="9"
+                      fill="#fffdf8"
+                      stroke="#6796aa"
+                      stroke-width="2"
+                    />
+                    <path d="M6 23h45" stroke="#6796aa" stroke-width="2" />
+                    <path
+                      d="M18 5v11M39 5v11"
+                      stroke="#6796aa"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M18 34h8m8 0h7m-23 9h8"
+                      stroke="#6796aa"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                    />
+                    <circle
+                      cx="49"
+                      cy="49"
+                      r="13"
+                      fill="#3e7258"
+                      stroke="#e9eee1"
+                      stroke-width="3"
+                    />
+                    <path
+                      d="m43 49 4 4 8-9"
+                      stroke="#fffdf8"
+                      stroke-width="2.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <h4 id="calendar-title">Erst die Zusage. Dann der Termin.</h4>
+                  <p id="calendar-detail">
+                    Vorgeschlagene Zeiten sind noch keine Buchung.
+                  </p>
+                </div>
+              </div>
+              <div class="appointment-followup">
+                <p>
+                  <strong>Für Tom</strong><br />Der bestätigte Termin steht
+                  direkt im Kalender.
+                </p>
+                <p>
+                  <strong>Für die Kundin</strong><br />Eine Bestätigung und eine
+                  automatische Erinnerung eine Stunde vor dem Termin.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="story-row repair-row" id="reparatur">
+          <div class="story-cell left">
+            <p class="eyebrow">Am vereinbarten Ort</p>
+            <h3>Keine Schlepperei.<br />Einfach weiterfahren.</h3>
+            <p>
+              Tom kommt zum Fahrrad. Was gemacht wird und was es kostet,
+              bespricht er persönlich mit der Kundin.
+            </p>
+            <svg class="repair-bike"><use href="#bike" /></svg>
+          </div>
+          <div class="story-cell right">
+            <p class="step-label" data-thread="right">05 · Die Reparatur</p>
+            <div class="repair-scene">
+              <svg><use href="#tom" /></svg
+              ><span id="repair-place">⌖ Am Standort der Kundin</span>
+            </div>
+            <p id="repair-status" role="status">
+              Sobald der Termin steht, kann Tom loslegen.
+            </p>
+            <button class="button primary" id="finish-repair" disabled>
+              Reparatur als fertig markieren ✓
+            </button>
+            <form id="amount-form" hidden>
+              <label for="amount-input">Tatsächlicher Betrag</label>
+              <div class="amount-field">
+                <input
+                  id="amount-input"
+                  type="number"
+                  min="1"
+                  max="9999"
+                  step="0.01"
+                  value="79"
+                  required
+                  disabled
+                /><span>€</span>
+              </div>
+              <button class="button secondary" id="confirm-amount" disabled>
+                Betrag bestätigen
+              </button>
+            </form>
+          </div>
+        </section>
+        <section class="story-row payment-row" id="abschluss">
+          <div class="story-cell left">
+            <p class="step-label" data-thread="left">06 · Wieder startklar</p>
+            <div class="payment-card">
+              <h3>Repariert.<br />Bezahlt. Erledigt.</h3>
+              <p id="payment-intro">
+                Nach der Reparatur bestätigt Tom den tatsächlichen Betrag. Dann
+                kann die Kundin bezahlen.
+              </p>
+              <div id="checkout" hidden>
+                <p id="checkout-amount"></p>
+                <button class="button primary" id="pay">
+                  Zahlung abschließen ✓
+                </button>
+              </div>
+              <div id="paid" hidden>
+                <div class="receipt-check">✓</div>
+                <h4>Zahlung erledigt.</h4>
+                <p id="paid-amount"></p>
+                <span class="integration"
+                  ><b class="stripe-word">stripe</b> Zahlung erledigt</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="story-cell right complete-side">
+            <div class="completion-symbol" id="completion-symbol">↗</div>
+            <h3 id="completion-title">
+              Ein Auftrag.<br />Ein guter Abschluss.
+            </h3>
+            <p id="completion-detail">
+              Von der ersten Anfrage bis zum erledigten Auftrag: ein gemeinsamer
+              Ablauf, den du in der Hand behältst.
+            </p>
+            <button class="button secondary" data-reset>↺ Neu starten</button>
+          </div>
+        </section>
+      </div>
+      <section class="availability" id="zeiten">
+        <div>
+          <p class="eyebrow">Du gibst den Takt vor</p>
+          <h2>Dein Fahrradservice<br /><span>passt in dein Leben.</span></h2>
+          <p>
+            Gib die Zeiten frei, die Kunden direkt buchen dürfen.<br />Bei allen
+            anderen Anfragen entscheidest du selbst.
+          </p>
+        </div>
+        <div class="week-calendar">
+          <div class="week-heading">
+            <b>Deine Woche</b>
+          </div>
+          <div class="week-grid">
+            <div>
+              <b>Mo</b><span>Nur nach<br />deiner Zusage</span>
+            </div>
+            <div class="available">
+              <b>Di</b><span>15–17 Uhr<br />direkt buchbar</span>
+            </div>
+            <div class="available">
+              <b>Mi</b><span>15–17 Uhr<br />direkt buchbar</span>
+            </div>
+            <div class="available">
+              <b>Do</b><span>15–17 Uhr<br />direkt buchbar</span>
+            </div>
+            <div>
+              <b>Fr</b><span>Nur nach<br />deiner Zusage</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="package" id="paket">
+        <p class="eyebrow">Persönlich eingerichtet. Technisch betreut.</p>
+        <h2>Dein Können braucht<br /><span>einen guten Auftritt.</span></h2>
+        <div class="package-grid">
+          <article>
+            <span>01 / Start</span>
+            <h3>Deine Marke.<br />Deine Website.</h3>
+            <p>
+              Positionierung, Gestaltung, persönliche Website und ein
+              gemeinsamer Start. Auf deinen Betrieb abgestimmt.
+            </p>
+          </article>
+          <article>
+            <span>02 / Alltag</span>
+            <h3>Anfragen rein.<br />Hände frei.</h3>
+            <p>
+              Website-Anfrage und Telefonannahme, übersichtliche Übergabe,
+              Termine und Rückmeldungen. Du behältst die Entscheidung.
+            </p>
+          </article>
+          <article>
+            <span>03 / Betrieb</span>
+            <h3>Die Technik<br />läuft mit.</h3>
+            <p>
+              Einrichtung und laufende technische Betreuung deiner
+              Infrastruktur. Kalender und Zahlung passend zu deinem Ablauf.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section class="contact" id="kennenlernen">
+        <svg><use href="#helper" /></svg>
+        <p class="eyebrow">Dein nächster Schritt</p>
+        <h2>Du hast das Können.<br />Was hast du vor?</h2>
+        <p>
+          Ein eigener mobiler Service oder weniger Organisationsarbeit im
+          bestehenden Betrieb? Lass uns deinen Alltag anschauen.
+        </p>
+        <button class="button primary" id="contact-button">
+          Unverbindlich kennenlernen ↗
+        </button>
+        <p id="contact-status" class="tiny" role="status"></p>
+      </section>
+    </main>
+    <footer>
+      <span
+        >Dein Fahrradservice
+        <small class="art-credit">
+          · Lastenrad:
+          <a
+            href="https://commons.wikimedia.org/wiki/File:Freight_bike_construction_types.svg"
+            >MagentaGreen</a
+          >,
+          <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+          (angepasst)</small
+        ></span
+      >
+      <div>
+        <button data-dialog="demo">Zur Demo & Datenschutz</button
+        ><button data-dialog="imprint">Anbieterangaben</button>
+      </div>
+    </footer>
+    <dialog id="info-dialog" aria-labelledby="dialog-title">
+      <button class="dialog-close" aria-label="Hinweis schließen">×</button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div class="demo-toolbar">
+      <span id="demo-status" role="status">Bereit</span
+      ><button data-reset aria-label="Demo vollständig neu starten">
+        ↺ Neustart
+      </button>
+    </div>
+  </body>
+</html>

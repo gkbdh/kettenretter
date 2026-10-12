@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" width="122" height="62" viewBox="0 0 122 62">
+  <title>
+    Typische Bauformen von Lastenfahrrädern
+  </title>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>
+          image/svg+xml
+        </dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <dc:title>
+          Typische Bauformen von Lastenfahrrädern
+        </dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>
+              MagentaGreen
+            </dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path fill="#ffffff" fill-rule="evenodd" d="M0 0h122v62H0z"/>
+  <g stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+  <switch>
+    <g systemLanguage="longjohn" transform="translate(-1.05 -8.99)"> <!-- Tieflader-->
+    <circle cx="14.163" cy="57.139" r="10.364" fill="none"/>
+    <circle r="14.31" cy="52.986" cx="106.12" fill="none"/>
+    <path d="M89.545 21.094l-10.428 33.61m-14.13-37.51L60.53 19.36l-.16 36.74" fill="none"/>
+    <path d="M93.585 21.41l-8.355-.033" fill="none" stroke-width="2"/>
+    <path d="M60.467 37.25v19.134l-27.92.89-14.24-18.836z" fill="#999999" fill-rule="evenodd"/>
+    <path d="M19.222 33.43L14.36 57.3m46.112-24.34l25.175-.277 20.203 20.514-45.383 3.187m-44.005-6.917l2.167 4.455 41.78-1.618" fill="none"/>
+    </g>
+    <g systemLanguage="bakfiets" transform="translate(-1.05 -8.99)"> <!-- Frontlader-->
+    <circle cx="29.852" cy="54.914" r="12.478" fill="none"/>
+    <circle r="13.182" cy="54.173" cx="96.867" fill="none"/>
+    <path d="M50.302 33.178V57.76H11.576V33.178z" fill="#999999" fill-rule="evenodd"/>
+    <path d="M82.302 24.357l-9.835 31.238M54.744 20.433l-4.442 2.195.07 34.568" fill="none"/>
+    <path d="M86.342 24.672l-8.355-.032" fill="none" stroke-width="2"/>
+    <path d="M79.63 34.147l17.35 20.29-46.678 3.323" fill="none"/>
+    </g>
+    <g systemLanguage="trikecc" transform="translate(-1.05 -8.99)"> <!-- Lasten-Dreirad / Classic Trike -->
+    <circle r="13.182" cy="54.129" cx="94.3" fill="none"/>
+    <path d="M115.27 18.275v37.03H76.163v-37.03z" fill="#999999" fill-rule="evenodd"/>
+    <path d="M64.605 24.016l-9.835 31.24M37.338 20.874l-4.878.87-9.57 33.217" fill="none"/>
+    <path d="M62.625 31.235l8.65 23.752m4.893.348l-21.398.176-25.462-22.06 42.025 21.52" fill="none"/>
+    <circle cx="22.763" cy="54.468" r="12.901" fill="none"/>
+    <path d="M68.337 23.65l-8.356-.033" fill="none" stroke-width="2"/>
+    </g>
+    <g systemLanguage="trikefg" transform="translate(-1.05 -8.99)"> <!-- Lasten-Dreirad mit Verkleidung / Trike with fairing-->
+    <path d="M42.23 36.573l-22.57 23.73" fill="none"/>
+    <ellipse cx="19.542" cy="59.979" rx="7.708" ry="7.708" fill="none"/>
+    <path d="M46.235 38.1l-7.49-3.703" fill="none"/>
+    <circle r="7.708" cy="59.979" cx="97.942" fill="none"/>
+    <path d="M112.31 12.635v47.76H68.535l-33.242-4.813-12.533-13.26 2.236-5.363L38.89 49.754l29.645 4.286V12.636z" fill="#999999" fill-rule="evenodd"/>
+    <path d="M25.145 36.573c7.42-17.356 28.74-22.395 43.013-23.938" fill="none"/>
+    <path d="M30.588 58.277c-1.572-5.326-5.183-7.88-9.42-8.94m44.927-17.023L63.543 51.17l-10.45-1.617" fill="none"/>
+    </g>
+    <g  transform="translate(-1.05 5.697)"> <!-- Default: Langträger / Longtail --> 
+    <circle cx="21.68" cy="38.297" r="14.31" fill="none"/>
+    <circle r="14.31" cy="38.296" cx="98.18" fill="none"/>
+    <path d="M115.38 18.543v24.474H69.93V18.543" fill="#999999" fill-rule="evenodd"/>
+    <path d="M60.885 18.543h56.755M32.737 13.1L68.89 26.475m-37.108-11.79l22.04 23.487m15.752.528l-15.544-.36M64.21 6.405l-9.836 31.238M40.87 4.24l-4.948.28-14.327 33.827" fill="none"/>
+    <path d="M68.25 6.72l-8.356-.032" fill="none" stroke-width="2"/>
+    </g>
+  </switch>  
+  </g>
+</svg>
