@@ -28,6 +28,9 @@
       aria-hidden="true"
     >
       <defs>
+        <symbol id="arrow-up-right" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="spark" viewBox="0 0 32 32"><path d="M16 2v28M2 16h28M6 6l20 20M6 26 26 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+        <symbol id="handset" viewBox="0 0 24 24"><path d="M5 3 2 6c0 8 8 16 16 16l3-3-5-5-3 3c-3-1-5-3-6-6l3-3z" fill="currentColor"/></symbol>
         <symbol id="bike" viewBox="0 0 122 62">
           <title>Frontloader-Lastenrad</title>
           <g
@@ -178,11 +181,11 @@
     </svg>
     <header class="header">
       <a class="brand" href="#top"
-        ><span class="brand-icon">↗</span> Dein Fahrradservice</a
+        ><span class="brand-icon"><svg class="inline-icon" aria-hidden="true"><use href="#arrow-up-right"/></svg></span> Dein Fahrradservice</a
       >
       <nav aria-label="Hauptnavigation">
         <a href="#geschichte">Der Ablauf</a><a href="#paket">Dein Paket</a
-        ><a class="nav-button" href="#kennenlernen">Kennenlernen ↗</a>
+        ><button class="nav-button" data-contact>Kennenlernen <svg class="inline-icon" aria-hidden="true"><use href="#arrow-up-right"/></svg></button>
       </nav>
     </header>
     <main id="main">
@@ -201,7 +204,7 @@
           </p>
           <a class="button primary" href="#geschichte"
             >Einen Auftrag erleben <span>↓</span></a
-          >
+          ><button class="button secondary hero-contact" data-contact>Unverbindlich kennenlernen</button>
         </div>
         <div
           class="hero-art"
@@ -220,8 +223,7 @@
             <svg><use href="#helper" /></svg
             ><span>Ich halte dir<br />die Hände frei.</span>
           </div>
-          <span class="art-spark spark-one">✳</span
-          ><span class="art-spark spark-two">✳</span>
+          <svg class="art-spark spark-one" aria-hidden="true"><use href="#spark"/></svg><svg class="art-spark spark-two" aria-hidden="true"><use href="#spark"/></svg>
         </div>
       </section>
       <section class="story-intro" id="geschichte">
@@ -247,6 +249,8 @@
               <p>Wie bringe ich das schwere Lastenrad zur Werkstatt?</p>
               <p>Wie lange ist es weg?</p>
               <p>Wann bekomme ich Rückmeldung?</p>
+              <p>Kann jemand direkt zu mir kommen?</p>
+              <p>Was kostet die Reparatur?</p>
             </div>
             <svg class="customer-figure" aria-label="Illustrierte Kundin">
               <use href="#customer" />
@@ -322,8 +326,9 @@
                         ><span>Persönlich vor Ort</span>
                       </div>
                       <button class="button primary" id="open-request">
-                        Reparatur anfragen →
+                        Reparatur online anfragen →
                       </button>
+                      <button class="button phone-entry" id="open-phone"><svg class="inline-icon" aria-hidden="true"><use href="#handset"/></svg> Lieber anrufen</button>
                       <p class="tiny">
                         Preis und Reparaturumfang stimmen wir vorher ab.
                       </p>
@@ -458,6 +463,15 @@
                       </form>
                     </div>
                     <div id="phone-intake" hidden>
+                      <div class="outgoing-call">
+                        <svg class="call-avatar" aria-hidden="true"><use href="#tom"/></svg>
+                        <h4>KetttenRetter Tom</h4><p>Dein Fahrradservice</p>
+                        <p class="tiny">Telefon-Demo · Voicebot-Vorschau</p>
+                        <div class="call-controls" aria-hidden="true"><span>Stumm</span><span>Tastatur</span><span>Lautsprecher</span></div>
+                        <button id="start-voicebot" class="call-button" aria-label="Telefon-Demo anrufen"><svg aria-hidden="true"><use href="#handset"/></svg></button>
+                        <p>Anrufen</p><p id="voicebot-status" class="tiny" role="status"></p>
+                      </div>
+                      <div id="phone-example" hidden>
                       <div class="phone-assistant">
                         <svg><use href="#helper" /></svg>
                         <h4>„Servus! Was fehlt deinem Rad?“</h4>
@@ -481,6 +495,7 @@
                       <button class="button primary" id="send-phone">
                         Gespräch an Tom übergeben →
                       </button>
+                      </div>
                     </div>
                   </div>
                   <div id="intake-receipt" hidden>
@@ -680,7 +695,7 @@
         <section class="story-row callback-row" id="rueckruf">
           <div class="story-cell left">
             <p class="step-label" data-thread="left">04 · Der Rückruf</p>
-            <h3>„Mein Telefon klingelt.“</h3>
+            <h3>„Ah, ich bekomme schon einen Rückruf!“</h3>
             <div class="callback-card">
               <div id="callback-idle"></div>
               <div id="callback-live" hidden>
@@ -777,7 +792,7 @@
                   </svg>
                 </span>
                 <div>
-                  <h4 id="calendar-title">Erst die Zusage. Dann der Termin.</h4>
+                  <h4 id="calendar-title">Erst deine Zusage. Dann der Termin.</h4>
                   <p id="calendar-detail">
                     Vorgeschlagene Zeiten sind noch keine Buchung.
                   </p>
@@ -842,11 +857,12 @@
           <div class="story-cell left">
             <p class="step-label" data-thread="left">06 · Wieder startklar</p>
             <div class="payment-card">
-              <h3>Repariert.<br />Bezahlt. Erledigt.</h3>
+              <h3>Vor Ort bezahlt.<br />Einfach erledigt.</h3>
               <p id="payment-intro">
                 Nach der Reparatur bestätigt Tom den tatsächlichen Betrag. Dann
                 kann die Kundin bezahlen.
               </p>
+              <p class="payment-methods"><strong>Kreditkarte über Stripe oder bar.</strong><br />Wir richten dein Zahlungssystem ein, damit du direkt vor Ort kassieren kannst.</p>
               <div id="checkout" hidden>
                 <p id="checkout-amount"></p>
                 <button class="button primary" id="pay">
@@ -864,14 +880,14 @@
             </div>
           </div>
           <div class="story-cell right complete-side">
-            <div class="completion-symbol" id="completion-symbol">↗</div>
+            <div class="completion-symbol" id="completion-symbol"><svg class="inline-icon" aria-hidden="true"><use href="#arrow-up-right"/></svg></div>
             <h3 id="completion-title">
-              Ein Auftrag.<br />Ein guter Abschluss.
+              Weniger Papierkram.<br />Mehr Überblick.
             </h3>
             <p id="completion-detail">
-              Von der ersten Anfrage bis zum erledigten Auftrag: ein gemeinsamer
-              Ablauf, den du in der Hand behältst.
+              Auftrag, Zahlung und Beleg gehören zusammen. Kartenzahlungen laufen über Stripe; Barzahlungen werden im Auftrag erfasst. Wir richten die Ablage und den Export so ein, dass du die Unterlagen einfacher an deine Buchhaltung oder deinen Steuerberater übergeben kannst.
             </p>
+            <button class="button primary" data-contact>So möchte ich arbeiten</button>
             <button class="button secondary" data-reset>↺ Neu starten</button>
           </div>
         </section>
@@ -881,8 +897,7 @@
           <p class="eyebrow">Du gibst den Takt vor</p>
           <h2>Dein Fahrradservice<br /><span>passt in dein Leben.</span></h2>
           <p>
-            Gib die Zeiten frei, die Kunden direkt buchen dürfen.<br />Bei allen
-            anderen Anfragen entscheidest du selbst.
+            Starte im Nebenjob, wachse Schritt für Schritt in die Vollzeit oder lege direkt hauptberuflich los. Das System passt sich deinem Umfang an.<br />Du gibst buchbare Zeiten frei und entscheidest bei anderen Anfragen selbst.
           </p>
         </div>
         <div class="week-calendar">
@@ -933,10 +948,11 @@
             <h3>Die Technik<br />läuft mit.</h3>
             <p>
               Einrichtung und laufende technische Betreuung deiner
-              Infrastruktur. Kalender und Zahlung passend zu deinem Ablauf.
+              Infrastruktur. Kalender, Stripe für Kartenzahlungen vor Ort und die Erfassung von Barzahlungen – mit geordneten Belegen für deine Buchhaltung.
             </p>
           </article>
         </div>
+        <button class="button primary package-contact" data-contact>Meinen Start besprechen</button>
       </section>
       <section class="contact" id="kennenlernen">
         <svg><use href="#helper" /></svg>
@@ -946,8 +962,8 @@
           Ein eigener mobiler Service oder weniger Organisationsarbeit im
           bestehenden Betrieb? Lass uns deinen Alltag anschauen.
         </p>
-        <button class="button primary" id="contact-button">
-          Unverbindlich kennenlernen ↗
+        <button class="button primary" id="contact-button" data-contact>
+          Unverbindlich kennenlernen <svg class="inline-icon" aria-hidden="true"><use href="#arrow-up-right"/></svg>
         </button>
         <p id="contact-status" class="tiny" role="status"></p>
       </section>

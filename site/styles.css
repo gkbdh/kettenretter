@@ -2525,3 +2525,31 @@ footer .art-credit a {
 #voice-transcript {
   white-space: pre-line;
 }
+
+/* Fixed vector artwork prevents mobile operating systems from substituting emoji. */
+.inline-icon { width: 1.1em; height: 1.1em; display: inline-block; vertical-align: -.12em; flex-shrink: 0; }
+.brand-icon .inline-icon, .completion-symbol .inline-icon { width: 100%; height: 100%; }
+.art-spark { width: 1em; height: 1em; }
+nav .nav-button { font-family: inherit; font-size: inherit; }
+.hero-contact { margin: 12px 0 0; }
+#open-phone { background: #3e7258; color: #fffdf8; width: 100%; margin-top: 10px; }
+.outgoing-call { background: #253b33; color: #fffdf8; border-radius: 22px; padding: 30px 16px 24px; text-align: center; }
+.outgoing-call .call-avatar { width: 70px; height: 90px; }
+.outgoing-call h4 { font-size: 23px; margin-top: 12px; }
+.outgoing-call p { color: inherit; margin: 8px 0; }
+.call-controls { display: flex; justify-content: space-around; gap: 8px; margin: 30px 0; font-size: 11px; }
+.call-button { display: inline-grid; place-items: center; width: 68px; height: 68px; border: 0; border-radius: 50%; background: #30b969; color: white; }
+.call-button svg { width: 30px; height: 30px; }
+#phone-example { margin-top: 20px; }
+.callback-card { background: transparent; border: 0; padding: 0; border-radius: 0; }
+#play-callback, #play-callback:hover { background: transparent; color: var(--ink); border: 0; border-radius: 0; padding: 8px 0; text-decoration: underline; text-underline-offset: 5px; }
+.payment-methods { margin-top: 20px; font-size: 14px; line-height: 1.6; }
+.package-contact { margin-top: 30px; }
+.complete-side > .button { margin-right: 8px; }
+.contact-form { display: grid; gap: 10px; margin-top: 24px; }
+.contact-form label { font-size: 14px; font-weight: 700; margin-top: 6px; }
+.contact-form input, .contact-form select, .contact-form textarea { width: 100%; min-width: 0; padding: 12px; border: 1px solid #aab3a3; border-radius: 10px; background: #fffdf8; color: var(--ink); font: inherit; font-size: 16px; }
+.contact-form textarea { resize: vertical; }
+#info-dialog { max-height: calc(100dvh - 32px); overflow-y: auto; }
+#lead-status a { text-decoration: underline; }
+@media (max-width: 700px) { .hero-contact { width: 100%; } nav .nav-button { font-size: 12px; } }

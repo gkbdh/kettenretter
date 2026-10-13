@@ -138,7 +138,7 @@ function focusAt(selector) {
 function stopAudio() {
   audio.pause();
   audio.currentTime = 0;
-  text("#play-callback", "▶ Rückruf anhören");
+  text("#play-callback", "Rückruf anhören");
   text("#audio-status", "");
 }
 function reset() {
@@ -238,7 +238,7 @@ function resetProgress() {
   text("#callback-number", defaults.phone);
   $("#callback-avatar use").setAttribute("href", "#helper");
   $(".calendar-booking").classList.remove("is-booked");
-  text("#calendar-title", "Erst die Zusage. Dann der Termin.");
+  text("#calendar-title", "Erst deine Zusage. Dann der Termin.");
   text("#calendar-detail", "Vorgeschlagene Zeiten sind noch keine Buchung.");
   text("#repair-place", "⌖ Am Standort der Kundin");
   text("#repair-status", "Sobald der Termin steht, kann Tom loslegen.");
@@ -252,11 +252,11 @@ function resetProgress() {
     "#payment-intro",
     "Nach der Reparatur bestätigt Tom den tatsächlichen Betrag. Dann kann die Kundin bezahlen.",
   );
-  text("#completion-symbol", "↗");
-  text("#completion-title", "Ein Auftrag. Ein guter Abschluss.");
+  $("#completion-symbol").innerHTML = '<svg class="inline-icon" aria-hidden="true"><use href="#arrow-up-right"/></svg>';
+  text("#completion-title", "Weniger Papierkram. Mehr Überblick.");
   text(
     "#completion-detail",
-    "Von der ersten Anfrage bis zum erledigten Auftrag: ein gemeinsamer Ablauf, den du in der Hand behältst.",
+    "Auftrag, Zahlung und Beleg gehören zusammen. Kartenzahlungen laufen über Stripe; Barzahlungen werden im Auftrag erfasst. Wir richten Ablage und Export für deine Buchhaltung oder deinen Steuerberater ein.",
   );
 }
 function setChannel(channel) {
@@ -269,7 +269,20 @@ function setChannel(channel) {
   );
   visible("#web-intake", channel === "website");
   visible("#phone-intake", channel === "phone");
+  if (channel === "phone") visible("#phone-example", true);
 }
+$("#open-phone").addEventListener("click", () => {
+  visible("#personal-home", false);
+  visible("#intake", true);
+  setChannel("phone");
+  visible("#phone-example", false);
+  $("#start-voicebot").focus({ preventScroll: true });
+});
+$("#start-voicebot").addEventListener("click", () => {
+  visible("#phone-example", true);
+  text("#voicebot-status", "Hier startet künftig das Gespräch mit dem ElevenLabs-Assistenten. Bis dahin kannst du das Beispielgespräch darunter ausprobieren.");
+  $("#start-voicebot").setAttribute("aria-expanded", "true");
+});
 $("#open-request").addEventListener("click", () => {
   visible("#personal-home", false);
   visible("#intake", true);
@@ -478,7 +491,7 @@ async function setupVoice() {
       audio.src = result.audio_url;
       readyConversation = true;
       $("#play-callback").disabled = false;
-      text("#play-callback", "▶ Rückruf anhören");
+      text("#play-callback", "Rückruf anhören");
       text("#audio-status", "");
     } else {
       text("#play-callback", "Rückruf noch nicht verfügbar");
@@ -693,17 +706,17 @@ $("#play-callback").addEventListener("click", async () => {
   }
 });
 audio.addEventListener("play", () => {
-  text("#play-callback", "Ⅱ Rückruf pausieren");
+  text("#play-callback", "Rückruf pausieren");
   text("#audio-status", "");
 });
 audio.addEventListener("pause", () =>
   text(
     "#play-callback",
-    audio.ended ? "↺ Rückruf erneut anhören" : "▶ Rückruf anhören",
+    audio.ended ? "Rückruf erneut anhören" : "Rückruf anhören",
   ),
 );
 audio.addEventListener("ended", () => {
-  text("#play-callback", "↺ Rückruf erneut anhören");
+  text("#play-callback", "Rückruf erneut anhören");
   text("#audio-status", "Gespräch beendet.");
   if (
     readyConversation &&
@@ -781,28 +794,32 @@ $$("[data-reset]").forEach((button) =>
     focusAt("#demo");
   }),
 );
-$("#contact-button").addEventListener("click", () => {
-  const title = document.createElement("h3");
-  title.id = "dialog-title";
-  title.textContent = "Was hast du vor?";
-  const p = document.createElement("p");
-  p.textContent =
-    "Ein Auftritt, der zu dir passt. Ein Alltag, in dem du Zeit fürs Fahrrad hast.";
-  const options = document.createElement("div");
-  options.className = "contact-options";
-  for (const label of [
-    "Ich möchte meinen eigenen Service starten →",
-    "Ich habe schon einen Fahrradservice →",
-  ]) {
+$$("[data-contact]").forEach((button) => button.addEventListener("click", () => {
+  $("#dialog-content").innerHTML = `
+    <h3 id="dialog-title">Lass uns deinen Start besprechen.</h3>
+    <p>Ein eigener Service oder ein leichterer Alltag im bestehenden Betrieb? Erzähl mir kurz, was du vorhast.</p>
+    <form id="contact-form" class="contact-form">
+      <label for="lead-name">Dein Name</label><input id="lead-name" name="name" autocomplete="name" maxlength="100" required>
+      <label for="lead-contact">E-Mail oder Telefonnummer</label><input id="lead-contact" name="contact" maxlength="150" required>
+      <label for="lead-plan">Was hast du vor?</label><select id="lead-plan" name="plan"><option>Im Nebenjob starten</option><option>Vom Nebenjob zur Vollzeit wachsen</option><option>Direkt in Vollzeit starten</option><option>Meinen bestehenden Service vereinfachen</option></select>
+      <label for="lead-message">Was ist dir wichtig? <span class="optional">optional</span></label><textarea id="lead-message" name="message" rows="3" maxlength="1000"></textarea>
+      <p class="tiny">Deine Angaben werden in eine E-Mail an robert@kondla.de übernommen. Du prüfst und sendest sie in deinem E-Mail-Programm. Hier werden sie nicht gespeichert.</p>
+      <button class="button primary" type="submit">Kontakt-E-Mail vorbereiten</button>
+      <p id="lead-status" class="tiny" role="status"></p>
+    </form>`;
+  $("#contact-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = new FormData(event.target);
+    const body = `Hallo Robert,\n\nich möchte meinen Fahrradservice besprechen.\n\nName: ${form.get("name")}\nKontakt: ${form.get("contact")}\nVorhaben: ${form.get("plan")}\n\n${form.get("message")}\n`;
+    const mailto = `mailto:robert@kondla.de?subject=${encodeURIComponent("Kennenlernen – mobiler Fahrradservice")}&body=${encodeURIComponent(body)}`;
     const link = document.createElement("a");
-    link.href = "#paket";
-    link.textContent = label;
-    link.addEventListener("click", () => dialog.close());
-    options.append(link);
-  }
-  $("#dialog-content").replaceChildren(title, p, options);
+    link.href = mailto;
+    link.textContent = "E-Mail erneut öffnen";
+    $("#lead-status").replaceChildren(document.createTextNode("Bitte sende die E-Mail in deinem E-Mail-Programm ab. "), link);
+    window.location.href = mailto;
+  });
   dialog.showModal();
-});
+}));
 const dialog = $("#info-dialog");
 $$("[data-dialog]").forEach((button) =>
   button.addEventListener("click", () => {
