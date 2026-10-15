@@ -19,6 +19,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
+    <script src="voice-agent.js" defer></script>
   </head>
   <body>
     <a class="skip" href="#main">Zum Inhalt</a>
@@ -466,10 +467,10 @@
                       <div class="outgoing-call">
                         <svg class="call-avatar" aria-hidden="true"><use href="#tom"/></svg>
                         <h4>KetttenRetter Tom</h4><p>Dein Fahrradservice</p>
-                        <p class="tiny">Telefon-Demo · Voicebot-Vorschau</p>
+                        <p class="tiny">Toms virtueller Assistent</p>
                         <div class="call-controls" aria-hidden="true"><span>Stumm</span><span>Tastatur</span><span>Lautsprecher</span></div>
                         <button id="start-voicebot" class="call-button" aria-label="Telefon-Demo anrufen"><svg aria-hidden="true"><use href="#handset"/></svg></button>
-                        <p>Anrufen</p><p id="voicebot-status" class="tiny" role="status"></p>
+                        <p>Anrufen</p><button class="button subtle" id="show-phone-example">Beispiel ohne Mikrofon</button><p id="voicebot-status" class="tiny" role="status"></p>
                       </div>
                       <div id="phone-example" hidden>
                       <div class="phone-assistant">
@@ -996,6 +997,18 @@
     <dialog id="info-dialog" aria-labelledby="dialog-title">
       <button class="dialog-close" aria-label="Hinweis schließen">×</button>
       <div id="dialog-content"></div>
+    </dialog>
+    <dialog id="voice-dialog" aria-labelledby="voice-title">
+      <button id="close-voice" class="voice-close" aria-label="Gespräch schließen">×</button>
+      <p class="eyebrow">KetttenRetter Tom</p>
+      <h2 id="voice-title">Wie kann ich dir helfen?</h2>
+      <div class="voice-orb" id="voice-orb">
+        <canvas id="voice-canvas" aria-hidden="true"></canvas>
+        <button id="voice-toggle" class="voice-toggle"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10v4m4-8v12m4-15v18m4-15v12m4-8v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span id="voice-toggle-label">Mit Tom sprechen</span></button>
+      </div>
+      <p id="live-voice-status" role="status" aria-live="polite">Dein virtueller Assistent hört dir zu.</p>
+      <button id="voice-mute" class="button subtle" hidden aria-pressed="false">Mikrofon stummschalten</button>
+      <p class="tiny voice-notice">Das Gespräch verwendet dein Mikrofon. Du kannst es jederzeit beenden.</p>
     </dialog>
     <div class="demo-toolbar">
       <span id="demo-status" role="status">Bereit</span

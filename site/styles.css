@@ -2553,3 +2553,20 @@ nav .nav-button { font-family: inherit; font-size: inherit; }
 #info-dialog { max-height: calc(100dvh - 32px); overflow-y: auto; }
 #lead-status a { text-decoration: underline; }
 @media (max-width: 700px) { .hero-contact { width: 100%; } nav .nav-button { font-size: 12px; } }
+
+/* Voice call: original animated WebGL orb with our own controls. */
+#voice-dialog { width: min(520px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 34px 24px 24px; border: 0; border-radius: 28px; color: #303e36; background: #fffdf8; text-align: center; overflow-y: auto; }
+#voice-dialog::backdrop { background: #1d302ac4; backdrop-filter: blur(7px); }
+#voice-dialog h2 { font-size: clamp(25px, 5vw, 34px); line-height: 1.15; margin: 10px 10px 20px; }
+#voice-dialog .eyebrow { margin-top: 6px; }
+.voice-close { position: absolute; right: 12px; top: 8px; border: 0; background: transparent; color: inherit; font: inherit; font-size: 30px; width: 44px; height: 44px; cursor: pointer; }
+.voice-orb { position: relative; width: min(100%, 380px); aspect-ratio: 1; margin: auto; border-radius: 50%; isolation: isolate; background: radial-gradient(ellipse at 70% 20%, #c3e2fb, transparent 55%), radial-gradient(ellipse at 20% 60%, #145950, #55ac97 55%, #9edfd5); box-shadow: inset 0 0 32px #ffffff60; }
+#voice-canvas { width: 100%; height: 100%; display: block; border-radius: 50%; }
+.voice-toggle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 10px; align-items: center; justify-content: center; white-space: nowrap; padding: 11px 19px 11px 11px; background: #e9f4efeb; color: #182a24; border: 1px solid #ffffff88; border-radius: 50px; font: inherit; font-weight: 750; cursor: pointer; box-shadow: 0 4px 20px #173c3320; }
+.voice-toggle > span:first-child { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #172e26; color: white; font-size: 23px; }
+.voice-active .voice-toggle { background: #fff1e9ed; }
+#live-voice-status { min-height: 26px; font-size: 15px; margin: 18px 0 4px; }
+.voice-notice { max-width: 320px; margin: 12px auto 0; color: #6f7972; }
+#show-phone-example { color: #fffdf8; font-size: 12px; text-decoration: underline; margin-top: 12px; }
+@media (max-width: 480px) { #voice-dialog { padding: 32px 16px 22px; } .voice-toggle { font-size: 14px; padding-right: 15px; } }
+.voice-toggle svg { width: 22px; height: 22px; }

@@ -225,7 +225,7 @@ function resetProgress() {
   audio.src = "assets/callback-dialogue.mp3";
   text(
     "#voice-description",
-    "Beispielrückruf · KI-generierte Stimme von ElevenLabs. Nach Toms Entscheidung hörst du hier die passende Rückmeldung.",
+    "Beispielrückruf · KI-generierte Stimme. Nach Toms Entscheidung hörst du hier die passende Rückmeldung.",
   );
   text("#voice-transcript", transcript(dialoguePlan(defaults)));
   visible("#confirm-visit", false);
@@ -278,10 +278,9 @@ $("#open-phone").addEventListener("click", () => {
   visible("#phone-example", false);
   $("#start-voicebot").focus({ preventScroll: true });
 });
-$("#start-voicebot").addEventListener("click", () => {
+$("#show-phone-example").addEventListener("click", () => {
   visible("#phone-example", true);
-  text("#voicebot-status", "Hier startet künftig das Gespräch mit dem ElevenLabs-Assistenten. Bis dahin kannst du das Beispielgespräch darunter ausprobieren.");
-  $("#start-voicebot").setAttribute("aria-expanded", "true");
+  $("#phone-example").scrollIntoView({ block: "nearest" });
 });
 $("#open-request").addEventListener("click", () => {
   visible("#personal-home", false);
@@ -511,7 +510,7 @@ async function setupVoice() {
   audio.src = `assets/callback-${variant}.mp3`;
   text(
     "#voice-description",
-    "KI-generierte Stimme · Chris Roberts, ElevenLabs. Vorproduzierter Demo-Rückruf. Deine individuellen Angaben stehen darüber.",
+    "KI-generierte Stimme · Chris Roberts. Vorproduzierter Demo-Rückruf. Deine individuellen Angaben stehen darüber.",
   );
   text("#voice-transcript", `„${transcripts[variant]}“`);
   visible("#voice-player", true);
@@ -832,8 +831,8 @@ $$("[data-dialog]").forEach((button) =>
     const p = document.createElement("p");
     p.textContent = isDemo
       ? staticSpeech
-        ? "Bitte ausschließlich Beispieldaten verwenden. Formulareingaben, Fotos und Standort bleiben im flüchtigen Zustand dieser Seite. Es gibt keine Formularübertragung, echten Anrufe, Nachrichten, Kalendereinträge oder Zahlungen. Das Hörbeispiel ist eine fertige Sprachaufnahme. Neustart und Neuladen verwerfen die Eingaben."
-        : "Bitte ausschließlich Beispieldaten verwenden. Fahrrad, Problem, Ort und Zeitwunsch gehen zur Sprachvorbereitung an diesen Server und bei verbundener Vertonung an ElevenLabs. Telefonnummer, Fotos und Standortkoordinaten werden nicht weitergegeben. Der Server hält die Sprachdatei höchstens 15 Minuten im Arbeitsspeicher. Für die Verarbeitung bei ElevenLabs gelten deren Datenschutzbedingungen. Es gibt keine echten Anrufe, Nachrichten, Kalendereinträge oder Zahlungen. Neustart verwirft den Seitenzustand; bereits übermittelte Angaben lassen sich damit nicht zurückholen."
+        ? "Das Live-Gespräch verarbeitet nach Klick auf „Mit Tom sprechen“ deine Sprache und Gesprächsangaben über ElevenLabs und den Sprachmodell-Anbieter. Audioaufzeichnung ist deaktiviert; die Aufbewahrungsfrist für Gesprächsdaten ist auf einen Tag eingestellt. Schließen beendet das Mikrofon. Es werden keine Aufträge, Termine oder Nachrichten ausgelöst und keine Gesprächsdaten in die Prozessdemo übertragen. Formulareingaben, Fotos und Standort der übrigen Prozessdemo bleiben flüchtig auf dieser Seite; das Hörbeispiel ist vorproduziert. Neustart verwirft den Seitenzustand, nicht bereits übermittelte Gesprächsdaten."
+        : "Beim Live-Gespräch werden nach Klick auf „Mit Tom sprechen“ Sprache und Gesprächsangaben über ElevenLabs und den Sprachmodell-Anbieter verarbeitet. Audioaufzeichnung ist deaktiviert; die Aufbewahrungsfrist für Gesprächsdaten ist auf einen Tag eingestellt. Schließen beendet das Mikrofon. Der Live-Assistent löst keine Aufträge, Termine oder Nachrichten aus und überträgt seine Gesprächsdaten nicht in die Prozessdemo. Für die übrige Prozessdemo bitte Beispieldaten verwenden. Fahrrad, Problem, Ort und Zeitwunsch gehen zur Sprachvorbereitung an diesen Server und bei verbundener Vertonung an ElevenLabs. Telefonnummer, Fotos und Standortkoordinaten werden nicht weitergegeben. Der Server hält die Sprachdatei höchstens 15 Minuten im Arbeitsspeicher. Für die Verarbeitung bei ElevenLabs gelten deren Datenschutzbedingungen. Es gibt keine Telefonverbindung zu Tom, Nachrichten, Kalendereinträge oder Zahlungen. Neustart verwirft den Seitenzustand; bereits übermittelte Angaben lassen sich damit nicht zurückholen."
       : "Anbietername, Anschrift und Kontakt sind noch zu ergänzen. Diese Vorschau enthält keine erfundenen Unternehmensdaten und ist noch kein öffentliches Leistungsangebot.";
     $("#dialog-content").replaceChildren(title, p);
     dialog.showModal();
