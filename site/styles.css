@@ -2537,7 +2537,6 @@ nav .nav-button { font-family: inherit; font-size: inherit; }
 .outgoing-call .call-avatar { width: 70px; height: 90px; }
 .outgoing-call h4 { font-size: 23px; margin-top: 12px; }
 .outgoing-call p { color: inherit; margin: 8px 0; }
-.call-controls { display: flex; justify-content: space-around; gap: 8px; margin: 30px 0; font-size: 11px; }
 .call-button { display: inline-grid; place-items: center; width: 68px; height: 68px; border: 0; border-radius: 50%; background: #30b969; color: white; }
 .call-button svg { width: 30px; height: 30px; }
 #phone-example { margin-top: 20px; }
@@ -2554,19 +2553,44 @@ nav .nav-button { font-family: inherit; font-size: inherit; }
 #lead-status a { text-decoration: underline; }
 @media (max-width: 700px) { .hero-contact { width: 100%; } nav .nav-button { font-size: 12px; } }
 
-/* Voice call: original animated WebGL orb with our own controls. */
-#voice-dialog { width: min(520px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 34px 24px 24px; border: 0; border-radius: 28px; color: #303e36; background: #fffdf8; text-align: center; overflow-y: auto; }
-#voice-dialog::backdrop { background: #1d302ac4; backdrop-filter: blur(7px); }
-#voice-dialog h2 { font-size: clamp(25px, 5vw, 34px); line-height: 1.15; margin: 10px 10px 20px; }
-#voice-dialog .eyebrow { margin-top: 6px; }
-.voice-close { position: absolute; right: 12px; top: 8px; border: 0; background: transparent; color: inherit; font: inherit; font-size: 30px; width: 44px; height: 44px; cursor: pointer; }
-.voice-orb { position: relative; width: min(100%, 380px); aspect-ratio: 1; margin: auto; border-radius: 50%; isolation: isolate; background: radial-gradient(ellipse at 70% 20%, #c3e2fb, transparent 55%), radial-gradient(ellipse at 20% 60%, #145950, #55ac97 55%, #9edfd5); box-shadow: inset 0 0 32px #ffffff60; }
+/* Live call stays inside the customer's phone. */
+#voice-call { margin: 0 13px; padding: 22px 16px 18px; min-height: 375px; border-radius: 23px; background: #253b33; }
+#voice-call .call-avatar { width: 56px; height: 70px; }
+#voice-call h4 { font-size: 22px; margin: 4px 0 26px; }
+#voice-call .call-button { position: relative; width: 86px; height: 86px; cursor: pointer; background: #a9edb4; color: #163c2b; box-shadow: 0 0 0 9px #a9edb414; }
+#voice-call .call-button::before, #voice-call .call-button::after { content: ""; position: absolute; inset: -9px; border: 1px solid #a9edb486; border-radius: inherit; pointer-events: none; animation: call-invite 2.8s ease-out infinite; }
+#voice-call .call-button::after { animation-delay: 1.4s; }
+#voice-call .call-button:hover { background: #c6f6cd; transform: translateY(-2px); }
+#voice-call .call-button:focus-visible { outline: 3px solid #fffdf8; outline-offset: 8px; }
+#voice-call .call-button svg { width: 34px; height: 34px; }
+#voice-call .call-invitation { margin: 24px 0 4px; font-size: 18px; font-weight: 800; }
+#voice-call .call-caption { margin: 0; font-size: 12px; color: #d0dcd3; }
+#voice-call #show-phone-example { background: transparent; color: #d0dcd3; font-size: 11px; padding: 7px 9px; margin-top: 8px; border: 0; text-decoration: underline; text-underline-offset: 3px; }
+#voice-call .call-live-title { margin: 0 0 14px; font-size: 15px; font-weight: 750; }
+.voice-orb { position: relative; width: min(100%, 225px); aspect-ratio: 1; margin: auto auto 14px; border-radius: 50%; isolation: isolate; background: radial-gradient(ellipse at 70% 20%, #c3e2fb, transparent 55%), radial-gradient(ellipse at 20% 60%, #145950, #55ac97 55%, #9edfd5); box-shadow: inset 0 0 32px #ffffff60; }
 #voice-canvas { width: 100%; height: 100%; display: block; border-radius: 50%; }
-.voice-toggle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 10px; align-items: center; justify-content: center; white-space: nowrap; padding: 11px 19px 11px 11px; background: #e9f4efeb; color: #182a24; border: 1px solid #ffffff88; border-radius: 50px; font: inherit; font-weight: 750; cursor: pointer; box-shadow: 0 4px 20px #173c3320; }
-.voice-toggle > span:first-child { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #172e26; color: white; font-size: 23px; }
-.voice-active .voice-toggle { background: #fff1e9ed; }
-#live-voice-status { min-height: 26px; font-size: 15px; margin: 18px 0 4px; }
-.voice-notice { max-width: 320px; margin: 12px auto 0; color: #6f7972; }
-#show-phone-example { color: #fffdf8; font-size: 12px; text-decoration: underline; margin-top: 12px; }
-@media (max-width: 480px) { #voice-dialog { padding: 32px 16px 22px; } .voice-toggle { font-size: 14px; padding-right: 15px; } }
-.voice-toggle svg { width: 22px; height: 22px; }
+.voice-toggle { display: inline-flex; gap: 8px; align-items: center; justify-content: center; padding: 11px 16px; background: #f4ddd5; color: #613e32; border: 0; border-radius: 50px; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+.voice-toggle .inline-icon { transform: rotate(135deg); }
+.voice-mute { display: block; margin: 8px auto 0; padding: 5px; background: transparent; color: #d0dcd3; border: 0; font: inherit; font-size: 11px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+#live-voice-status { font-size: 11px; line-height: 1.5; margin: 12px auto 0; max-width: 245px; color: #d0dcd3; }
+#live-voice-status:empty { display: none; }
+.voice-coach { padding: 26px 0; }
+.voice-coach h3 { font-size: clamp(38px, 4.2vw, 62px); line-height: 1.05; }
+.voice-coach > p:not(.eyebrow) { font-size: 16px; line-height: 1.6; max-width: 310px; margin-top: 24px; }
+.voice-scenarios { display: grid; gap: 12px; margin: 25px 0; }
+.voice-scenarios p { padding: 15px 18px; border: 1px solid #c6d2bc; border-radius: 16px 16px 16px 3px; background: #e8eddf; font-size: 17px; line-height: 1.5; }
+.voice-coach .voice-coach-footnote { font-size: 13px; color: #606960; }
+#voice-call .voice-mobile-prompt { display: none; }
+@keyframes call-invite { 0% { transform: scale(.93); opacity: .8; } 80%, 100% { transform: scale(1.35); opacity: 0; } }
+@media (max-width: 900px) { #voice-call .voice-mobile-prompt { display: block; max-width: 230px; margin: 14px auto 0; font-size: 12px; color: #d0dcd3; } }
+@media (prefers-reduced-motion: reduce) { #voice-call .call-button::before, #voice-call .call-button::after { animation: none; } #voice-call .call-button:hover { transform: none; } }
+/* Keep all live controls and the mobile prompt inside the phone viewport. */
+#voice-call:has(#inline-voice:not([hidden])) { min-height: 0; padding: 16px 12px; }
+#voice-call:has(#inline-voice:not([hidden])) #show-phone-example, #voice-call .call-live-title { display: none; }
+#voice-call .voice-orb { width: min(100%, 190px); margin-bottom: 12px; }
+#voice-call .voice-mute { margin-top: 5px; padding: 4px; }
+#voice-call:has(#inline-voice:not([hidden])) #live-voice-status { margin-top: 8px; }
+@media (max-width: 900px) {
+  #voice-call .voice-orb { width: min(100%, 150px); }
+  #voice-call .voice-mobile-prompt { margin-top: 10px; line-height: 1.45; }
+}

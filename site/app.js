@@ -150,7 +150,7 @@ function reset() {
   photoURL = null;
   state = {
     phase: "idle",
-    channel: "website",
+    channel: "phone",
     step: 1,
     request: null,
     coords: null,
@@ -165,8 +165,8 @@ function reset() {
   $("#amount-form").reset();
   for (const key of ["bike", "issue", "location", "time", "phone"])
     $(`#${key}-input`).value = defaults[key];
-  visible("#personal-home", true);
-  visible("#intake", false);
+  visible("#personal-home", false);
+  visible("#intake", true);
   visible("#intake-receipt", false);
   visible("#photo-preview", false);
   visible("#summary-photo", false);
@@ -186,7 +186,9 @@ function reset() {
   text("#summary-photo-text", "Kein Foto ergänzt");
   $$(".operator-actions button").forEach((button) => (button.disabled = false));
   resetProgress();
-  setChannel("website");
+  setChannel("phone");
+  visible("#phone-example", false);
+  document.dispatchEvent(new Event("demo:reset"));
   showStep(1);
   status("bereit");
 }
@@ -269,7 +271,9 @@ function setChannel(channel) {
   );
   visible("#web-intake", channel === "website");
   visible("#phone-intake", channel === "phone");
-  if (channel === "phone") visible("#phone-example", true);
+  visible("#personal-home", channel === "website");
+  visible("#intake", channel === "phone");
+  document.dispatchEvent(new CustomEvent("demo:channel", { detail: channel }));
 }
 $("#open-phone").addEventListener("click", () => {
   visible("#personal-home", false);
@@ -283,6 +287,7 @@ $("#show-phone-example").addEventListener("click", () => {
   $("#phone-example").scrollIntoView({ block: "nearest" });
 });
 $("#open-request").addEventListener("click", () => {
+  setChannel("website");
   visible("#personal-home", false);
   visible("#intake", true);
   $("#bike-input").focus({ preventScroll: true });

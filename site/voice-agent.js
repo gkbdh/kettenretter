@@ -1,11 +1,16 @@
 "use strict";
 (() => {
-  const dialog = document.querySelector("#voice-dialog");
+  const call = document.querySelector("#voice-call");
+  const intro = document.querySelector("#call-intro");
+  const live = document.querySelector("#inline-voice");
+  const start = document.querySelector("#start-voicebot");
   const toggle = document.querySelector("#voice-toggle");
   const label = document.querySelector("#voice-toggle-label");
   const status = document.querySelector("#live-voice-status");
   const mute = document.querySelector("#voice-mute");
   const canvas = document.querySelector("#voice-canvas");
+  const coach = document.querySelector("#voice-coach");
+  const story = document.querySelector("#brand-story");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let session = null;
   let attempt = 0;
@@ -15,16 +20,26 @@
   let volumes = null;
   let sdk = null;
 
-  function idle(message = "Dein virtueller Assistent hört dir zu.") {
+  function disposeOrb() {
+    clearInterval(volumes);
+    volumes = null;
+    orb?.dispose();
+    orb = null;
+  }
+
+  function idle(message = "") {
     connecting = false;
-    toggle.disabled = false;
-    label.textContent = "Mit Tom sprechen";
+    intro.hidden = false;
+    live.hidden = true;
+    coach.hidden = true;
+    story.hidden = false;
     status.textContent = message;
     mute.hidden = true;
     muted = false;
     mute.setAttribute("aria-pressed", "false");
     mute.textContent = "Mikrofon stummschalten";
-    dialog.classList.remove("voice-active");
+    call.classList.remove("voice-active");
+    disposeOrb();
   }
 
   async function stop(message = "Gespräch beendet.") {
@@ -47,14 +62,11 @@
     return sdk;
   }
 
-  async function show() {
-    document.querySelector("#callback-audio")?.pause();
-    idle();
-    dialog.showModal();
-    toggle.focus();
+  async function showOrb(current) {
+    canvas.hidden = false;
     try {
       const { Orb } = await import("./assets/voice/orb.js");
-      if (!dialog.open || orb) return;
+      if (attempt !== current || live.hidden || orb) return;
       orb = new Orb(canvas);
       orb.updateColors("#08735f", "#70bfd2");
       if (reducedMotion.matches) {
@@ -69,38 +81,42 @@
           orb.updateVolume(session.getInputVolume(), session.getOutputVolume());
       }, 80);
     } catch (_) {
-      // The CSS sphere remains visible when WebGL is unavailable.
-      canvas.hidden = true;
+      // The local CSS sphere keeps the call usable without WebGL.
+      if (attempt === current) canvas.hidden = true;
     }
   }
 
-  document.querySelector("#start-voicebot").addEventListener("click", show);
-  toggle.addEventListener("click", async () => {
-    if (session || connecting) return stop();
-    if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
-      status.textContent = "Für das Mikrofon öffne die Webseite bitte über HTTPS.";
-      return;
-    }
+  start.addEventListener("click", async () => {
+    if (session || connecting) return;
+    document.querySelector("#callback-audio")?.pause();
     const current = ++attempt;
     connecting = true;
+    intro.hidden = true;
+    live.hidden = false;
+    coach.hidden = false;
+    story.hidden = true;
     label.textContent = "Abbrechen";
     status.textContent = "Mikrofon freigeben · Verbindung wird aufgebaut …";
+    toggle.focus({ preventScroll: true });
+    void showOrb(current);
+    if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+      idle("Für das Mikrofon öffne die Webseite bitte über HTTPS.");
+      return;
+    }
     try {
       const client = await loadSDK();
-      if (attempt !== current || !dialog.open) return;
+      if (attempt !== current) return;
       const created = await client.Conversation.startSession({
         agentId: "agent_2501m4t5qbemfxvswmg7fyzxzd3c",
         connectionType: "websocket",
         onConnect: () => {
-          if (attempt !== current || !dialog.open) return;
-          connecting = false;
+          if (attempt !== current) return;
           label.textContent = "Gespräch beenden";
           status.textContent = "Verbunden";
-          mute.hidden = false;
-          dialog.classList.add("voice-active");
+          call.classList.add("voice-active");
         },
         onModeChange: ({ mode }) => {
-          if (attempt === current && dialog.open)
+          if (attempt === current)
             status.textContent = mode === "speaking" ? "Assistent spricht …" : "Ich höre zu …";
         },
         onDisconnect: () => {
@@ -113,7 +129,7 @@
           if (attempt === current) void stop("Verbindung unterbrochen. Bitte versuche es noch einmal.");
         },
       });
-      if (attempt !== current || !dialog.open) {
+      if (attempt !== current) {
         await created.endSession();
         return;
       }
@@ -123,11 +139,13 @@
       mute.hidden = false;
     } catch (error) {
       if (attempt !== current) return;
+      attempt++;
       idle(error?.name === "NotAllowedError"
         ? "Das Mikrofon ist gesperrt. Bitte erlaube den Zugriff in deinem Browser."
         : "Das Gespräch konnte nicht starten. Prüfe Mikrofon und Verbindung und versuche es erneut.");
     }
   });
+  toggle.addEventListener("click", () => { void stop(); start.focus({ preventScroll: true }); });
   mute.addEventListener("click", () => {
     if (!session) return;
     muted = !muted;
@@ -135,14 +153,10 @@
     mute.setAttribute("aria-pressed", String(muted));
     mute.textContent = muted ? "Mikrofon einschalten" : "Mikrofon stummschalten";
   });
-  document.querySelector("#close-voice").addEventListener("click", () => dialog.close());
-  dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
-  dialog.addEventListener("close", () => {
-    void stop();
-    clearInterval(volumes);
-    volumes = null;
-    orb?.dispose();
-    orb = null;
+  document.addEventListener("demo:channel", event => {
+    if (event.detail !== "phone") void stop("");
   });
+  document.addEventListener("demo:reset", () => { void stop(""); });
+  document.querySelector("#show-phone-example").addEventListener("click", () => { void stop(); });
   window.addEventListener("pagehide", () => { void stop(); });
 })();

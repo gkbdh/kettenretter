@@ -310,7 +310,18 @@
                     KetttenRetter <strong>tom.</strong
                     ><span>Beispielbetrieb</span>
                   </div>
-                  <div id="personal-home">
+                    <div
+                      class="channel-switch"
+                      role="group"
+                      aria-label="Kontaktweg"
+                    >
+                      <button data-channel="website" aria-pressed="false">
+                        Website</button
+                      ><button data-channel="phone" aria-pressed="true">
+                        Telefon
+                      </button>
+                    </div>
+                  <div id="personal-home" hidden>
                     <div class="portrait">
                       <svg><use href="#tom" /></svg
                       ><span>Tom · dein Fahrradmechaniker</span
@@ -335,19 +346,8 @@
                       </p>
                     </div>
                   </div>
-                  <div id="intake" hidden>
-                    <div
-                      class="channel-switch"
-                      role="group"
-                      aria-label="Kontaktweg"
-                    >
-                      <button data-channel="website" aria-pressed="true">
-                        Website</button
-                      ><button data-channel="phone" aria-pressed="false">
-                        Telefon
-                      </button>
-                    </div>
-                    <div id="web-intake">
+                  <div id="intake">
+                    <div id="web-intake" hidden>
                       <div
                         class="form-progress"
                         aria-label="Formularfortschritt"
@@ -463,14 +463,24 @@
                         </div>
                       </form>
                     </div>
-                    <div id="phone-intake" hidden>
-                      <div class="outgoing-call">
-                        <svg class="call-avatar" aria-hidden="true"><use href="#tom"/></svg>
-                        <h4>KetttenRetter Tom</h4><p>Dein Fahrradservice</p>
-                        <p class="tiny">Toms virtueller Assistent</p>
-                        <div class="call-controls" aria-hidden="true"><span>Stumm</span><span>Tastatur</span><span>Lautsprecher</span></div>
-                        <button id="start-voicebot" class="call-button" aria-label="Telefon-Demo anrufen"><svg aria-hidden="true"><use href="#handset"/></svg></button>
-                        <p>Anrufen</p><button class="button subtle" id="show-phone-example">Beispiel ohne Mikrofon</button><p id="voicebot-status" class="tiny" role="status"></p>
+                    <div id="phone-intake">
+                      <div class="outgoing-call" id="voice-call">
+                        <div id="call-intro">
+                          <svg class="call-avatar" aria-hidden="true"><use href="#tom"/></svg>
+                          <h4>KetttenRetter Tom</h4>
+                          <button id="start-voicebot" class="call-button" aria-label="Telefon-Demo jetzt ausprobieren"><svg aria-hidden="true"><use href="#handset"/></svg></button>
+                          <p class="call-invitation">Jetzt ausprobieren</p>
+                          <p class="call-caption">Anrufen &amp; einfach losreden</p>
+                        </div>
+                        <div id="inline-voice" hidden>
+                          <p class="call-live-title">KetttenRetter Tom</p>
+                          <div class="voice-orb" id="voice-orb"><canvas id="voice-canvas" aria-hidden="true"></canvas></div>
+                          <button id="voice-toggle" class="voice-toggle"><svg class="inline-icon" aria-hidden="true"><use href="#handset"/></svg><span id="voice-toggle-label">Abbrechen</span></button>
+                          <button id="voice-mute" class="voice-mute" hidden aria-pressed="false">Mikrofon stummschalten</button>
+                          <p class="voice-mobile-prompt">Spiel die Kundin: Dein Reifen ist platt oder die Kette ist gerissen.</p>
+                        </div>
+                        <p id="live-voice-status" role="status" aria-live="polite"></p>
+                        <button class="button subtle" id="show-phone-example">Beispiel ohne Mikrofon</button>
                       </div>
                       <div id="phone-example" hidden>
                       <div class="phone-assistant">
@@ -531,6 +541,14 @@
             </div>
           </div>
           <div class="story-cell right brand-explanation">
+            <aside id="voice-coach" class="voice-coach" hidden aria-labelledby="voice-coach-title">
+              <p class="eyebrow">Du bist dran</p>
+              <h3 id="voice-coach-title">Spiel die<br />Kundin.</h3>
+              <p>Was fehlt deinem Fahrrad? Probier zum Beispiel:</p>
+              <div class="voice-scenarios"><p>„Mein Reifen ist platt.“</p><p>„Meine Kette ist gerissen.“</p></div>
+              <p class="voice-coach-footnote">Sprich einfach ganz normal.</p>
+            </aside>
+            <div id="brand-story">
             <p class="eyebrow">Dein Auftritt, persönlich eingerichtet</p>
             <h3>Dein Name<br />an der Klingel.</h3>
             <p>
@@ -547,6 +565,7 @@
               <p>
                 Ich sammle die Angaben.<br /><strong>Du bleibst am Rad.</strong>
               </p>
+            </div>
             </div>
           </div>
         </section>
@@ -997,18 +1016,6 @@
     <dialog id="info-dialog" aria-labelledby="dialog-title">
       <button class="dialog-close" aria-label="Hinweis schließen">×</button>
       <div id="dialog-content"></div>
-    </dialog>
-    <dialog id="voice-dialog" aria-labelledby="voice-title">
-      <button id="close-voice" class="voice-close" aria-label="Gespräch schließen">×</button>
-      <p class="eyebrow">KetttenRetter Tom</p>
-      <h2 id="voice-title">Wie kann ich dir helfen?</h2>
-      <div class="voice-orb" id="voice-orb">
-        <canvas id="voice-canvas" aria-hidden="true"></canvas>
-        <button id="voice-toggle" class="voice-toggle"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10v4m4-8v12m4-15v18m4-15v12m4-8v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span id="voice-toggle-label">Mit Tom sprechen</span></button>
-      </div>
-      <p id="live-voice-status" role="status" aria-live="polite">Dein virtueller Assistent hört dir zu.</p>
-      <button id="voice-mute" class="button subtle" hidden aria-pressed="false">Mikrofon stummschalten</button>
-      <p class="tiny voice-notice">Das Gespräch verwendet dein Mikrofon. Du kannst es jederzeit beenden.</p>
     </dialog>
     <div class="demo-toolbar">
       <span id="demo-status" role="status">Bereit</span
