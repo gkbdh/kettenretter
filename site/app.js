@@ -27,7 +27,12 @@ function dialoguePlan(request) {
     "Donnerstag, 15–17 Uhr": "Donnerstag, 15:30 Uhr",
     "Nach Absprache": "Dienstag, 15:00 Uhr",
   };
-  const slot = slots[request.time] || slots[defaults.time];
+  const matchingDay = Object.keys(slots).find(key => {
+    const day = key.split(",")[0];
+    return ["Dienstag", "Mittwoch", "Donnerstag"].includes(day) &&
+      request.time?.toLocaleLowerCase("de").includes(day.toLocaleLowerCase("de"));
+  });
+  const slot = slots[request.time] || slots[matchingDay] || slots[defaults.time];
   const spoken = slot
     .replace(":00 Uhr", " Uhr")
     .replace("15 Uhr", "fünfzehn Uhr")
@@ -161,6 +166,11 @@ function reset() {
     amount: null,
   };
   $("#request-form").reset();
+  $("#phone-example").reset();
+  visible("#phone-spoken-wrap", false);
+  text("#phone-transcript", "");
+  visible("#summary-spoken", false);
+  visible("#callback-spoken", false);
   $("#offer-form").reset();
   $("#amount-form").reset();
   for (const key of ["bike", "issue", "location", "time", "phone"])
@@ -221,6 +231,11 @@ function resetProgress() {
   visible("#to-callback", false);
   visible("#callback-idle", true);
   visible("#callback-live", false);
+  visible("#personal-note", false);
+  text("#callback-heading", "„Ah, ich bekomme schon einen Rückruf!“");
+  visible("#callback-conversation", false);
+  document.dispatchEvent(new Event("demo:callback-stop"));
+  $("#rueckruf").classList.remove("callback-assistant");
   visible("#voice-player", true);
   $("#voice-player details").hidden = true;
   $("#voice-player details").open = false;
@@ -230,8 +245,6 @@ function resetProgress() {
     "Beispielrückruf · KI-generierte Stimme. Nach Toms Entscheidung hörst du hier die passende Rückmeldung.",
   );
   text("#voice-transcript", transcript(dialoguePlan(defaults)));
-  visible("#confirm-visit", false);
-  visible("#personal-call", false);
   visible("#choose-slot", false);
   $("#slot-options").replaceChildren();
   text("#slot-error", "");
@@ -258,7 +271,7 @@ function resetProgress() {
   text("#completion-title", "Weniger Papierkram. Mehr Überblick.");
   text(
     "#completion-detail",
-    "Auftrag, Zahlung und Beleg gehören zusammen. Kartenzahlungen laufen über Stripe; Barzahlungen werden im Auftrag erfasst. Wir richten Ablage und Export für deine Buchhaltung oder deinen Steuerberater ein.",
+    "Auftrag, Zahlung und Beleg gehören zusammen. Wir helfen dir beim Einrichten von SumUp Solo, beim Erfassen von Barzahlungen und beim Vorbereiten der Unterlagen für deine Buchhaltung. Die Identitätsprüfung bei SumUp und die Wahl einer passenden Kassenlösung erfolgen mit dir und deinem Steuerberater.",
   );
 }
 function setChannel(channel) {
@@ -411,23 +424,13 @@ $("#geolocate").addEventListener("click", () => {
     { enableHighAccuracy: false, timeout: 10000, maximumAge: 0 },
   );
 });
-function submitRequest(request, channel) {
-  resetProgress();
-  geoAttempt++;
-  $("#geolocate").disabled = false;
-  stopAudio();
-  visible("#voice-player", false);
-  state.phase = "requested";
-  state.channel = channel;
-  state.request = Object.freeze({ ...request });
-  if (channel === "phone") {
-    state.coords = null;
-    state.photo = null;
-  }
+function renderRequest(request, channel) {
   text("#summary-title", `${request.bike} · ${request.issue}`);
   text("#summary-location", request.location);
   text("#summary-time", request.time);
   text("#summary-phone", request.phone);
+  text("#summary-spoken", request.callNotes ? `Weitere wichtige Details: ${request.callNotes}` : "");
+  visible("#summary-spoken", Boolean(request.callNotes));
   text("#source-label", channel === "phone" ? "Telefon" : "Website");
   text("#order-status", "Neue Anfrage");
   text(
@@ -441,14 +444,44 @@ function submitRequest(request, channel) {
     $("#summary-photo").src = state.photo;
     visible("#summary-photo", true);
   }
+}
+function submitRequest(request, channel) {
+  resetProgress();
+  geoAttempt++;
+  $("#geolocate").disabled = false;
+  stopAudio();
+  visible("#voice-player", false);
+  state.phase = "requested";
+  state.channel = channel;
+  state.request = Object.freeze({ ...request });
+  if (channel === "phone") {
+    state.coords = null;
+    state.photo = null;
+  }
+  renderRequest(request, channel);
   visible("#personal-home", false);
   visible("#intake", false);
   visible("#intake-receipt", true);
   $$(".operator-actions button").forEach((button) => (button.disabled = false));
   status("Anfrage bei Tom");
-  prepareCallback(state.request);
   focusAt("#entscheidung");
 }
+// Agent tools only update this browser's transient demo state.
+document.addEventListener("demo:call-request", (event) => {
+  const request = event.detail.request;
+  resetProgress();
+  state.request = Object.freeze({ ...request });
+  state.channel = "phone";
+  state.coords = null;
+  state.photo = null;
+  state.phase = event.detail.confirmed ? "requested" : "collecting";
+  renderRequest(request, "phone");
+  text("#order-status", event.detail.confirmed ? "Neue Anfrage" : "Gespräch läuft · Angaben werden ergänzt");
+  $$(".operator-actions button").forEach(button => { button.disabled = !event.detail.confirmed; });
+});
+document.addEventListener("demo:call-finished", (event) => {
+  if (event.detail.confirmed && state.request) submitRequest(state.request, "phone");
+});
 $("#request-form").addEventListener("submit", (event) => {
   event.preventDefault();
   const request = Object.fromEntries(
@@ -464,16 +497,30 @@ $("#request-form").addEventListener("submit", (event) => {
   }
   submitRequest(request, "website");
 });
-$("#send-phone").addEventListener("click", () =>
-  submitRequest(defaults, "phone"),
-);
+$("#phone-example").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const fields = new FormData(event.currentTarget);
+  const request = Object.fromEntries(
+    ["bike", "issue", "location", "time", "phone", "callNotes"].map((key) => [
+      key,
+      String(fields.get(key) || "").trim(),
+    ]),
+  );
+  submitRequest(request, "phone");
+});
 function displayCallback() {
   visible("#callback-idle", false);
-  visible("#callback-live", true);
-  visible(".call-identity", state.action === "personal");
-  visible("#callback-transcript", state.action === "personal");
+  visible("#callback-live", state.action !== "personal");
+  visible("#personal-note", state.action === "personal");
+  text("#callback-heading", state.action === "personal" ? "Tom meldet sich persönlich." : "„Ah, ich bekomme schon einen Rückruf!“");
+  visible(".call-identity", state.action === "schedule" || state.action === "reject");
+  visible("#callback-transcript", state.action !== "assistant");
   visible("#to-callback", true);
   text("#callback-number", state.request.phone);
+  text("#callback-spoken", state.request.callNotes ? `Weitere wichtige Details aus dem ersten Gespräch: ${state.request.callNotes}` : "");
+  visible("#callback-spoken", Boolean(state.request.callNotes) && state.action !== "assistant");
+  visible("#callback-conversation", state.action === "assistant");
+  $("#rueckruf").classList.toggle("callback-assistant", state.action === "assistant");
   text("#repair-place", `⌖ ${state.request.location}`);
 }
 async function setupVoice() {
@@ -523,6 +570,7 @@ async function setupVoice() {
 
 $$("[data-action]").forEach((button) =>
   button.addEventListener("click", () => {
+    document.dispatchEvent(new Event("demo:operator-action"));
     // Scrolling straight to Tom's phone is a valid way to start the demo.
     if (!state.request) state.request = Object.freeze({ ...defaults });
     resetProgress();
@@ -583,13 +631,13 @@ $$("[data-action]").forEach((button) =>
       text(
         "#callback-transcript",
         personal
-          ? `Tom möchte deinen ${state.request.bike} persönlich besprechen: ${state.request.issue}. Die Anfrage ist angenommen. Im Gespräch vereinbart ihr den Einsatz bei ${state.request.location} · ${state.request.time}.`
+          ? "Tom übernimmt den Rückruf persönlich."
           : `Gute Nachricht: Tom übernimmt „${state.request.issue}“ bei deinem ${state.request.bike}. Standort: ${state.request.location}. Zeit: ${state.request.time}. Bestätige diese Angaben, damit der Termin steht.`,
       );
-      if (personal) visible("#personal-call", true);
-      else {
-        setupVoice();
-        visible("#confirm-visit", true);
+      if (!personal) {
+        document.dispatchEvent(new CustomEvent("demo:callback-ready", {
+          detail: { ...state.request, proposedTime: state.proposedTime },
+        }));
       }
       text("#calendar-title", "Zusage von Tom");
       text(
@@ -662,11 +710,9 @@ $("#choose-slot").addEventListener("submit", (event) => {
   visible("#choose-slot", false);
   book(slot.value);
 });
-function book(time) {
+function book(time, focus = true) {
   state.phase = "booked";
   state.selectedSlot = time;
-  visible("#personal-call", false);
-  visible("#confirm-visit", false);
   $(".calendar-booking").classList.add("is-booked");
   text("#calendar-title", "Termin gebucht ✓");
   text(
@@ -685,10 +731,11 @@ function book(time) {
   );
   $("#finish-repair").disabled = false;
   status("Termin steht");
-  focusAt("#reparatur");
+  if (focus) focusAt("#reparatur");
 }
-$("#answer-call").addEventListener("click", () => {
-  if (state.phase === "awaiting-confirmation") book(state.request.time);
+document.addEventListener("demo:callback-confirm", () => {
+  if (state.action === "assistant" && state.phase === "awaiting-confirmation")
+    book(state.proposedTime, false);
 });
 $("#play-callback").addEventListener("click", async () => {
   if (!audio.paused) {
@@ -722,14 +769,6 @@ audio.addEventListener("pause", () =>
 audio.addEventListener("ended", () => {
   text("#play-callback", "Rückruf erneut anhören");
   text("#audio-status", "Gespräch beendet.");
-  if (
-    readyConversation &&
-    playbackGeneration === generation &&
-    state.action === "assistant" &&
-    state.phase === "awaiting-confirmation"
-  ) {
-    book(state.proposedTime);
-  }
 });
 audio.addEventListener("error", () =>
   text(
@@ -835,9 +874,7 @@ $$("[data-dialog]").forEach((button) =>
       : "Anbieterangaben";
     const p = document.createElement("p");
     p.textContent = isDemo
-      ? staticSpeech
-        ? "Das Live-Gespräch verarbeitet nach Klick auf „Mit Tom sprechen“ deine Sprache und Gesprächsangaben über ElevenLabs und den Sprachmodell-Anbieter. Audioaufzeichnung ist deaktiviert; die Aufbewahrungsfrist für Gesprächsdaten ist auf einen Tag eingestellt. Schließen beendet das Mikrofon. Es werden keine Aufträge, Termine oder Nachrichten ausgelöst und keine Gesprächsdaten in die Prozessdemo übertragen. Formulareingaben, Fotos und Standort der übrigen Prozessdemo bleiben flüchtig auf dieser Seite; das Hörbeispiel ist vorproduziert. Neustart verwirft den Seitenzustand, nicht bereits übermittelte Gesprächsdaten."
-        : "Beim Live-Gespräch werden nach Klick auf „Mit Tom sprechen“ Sprache und Gesprächsangaben über ElevenLabs und den Sprachmodell-Anbieter verarbeitet. Audioaufzeichnung ist deaktiviert; die Aufbewahrungsfrist für Gesprächsdaten ist auf einen Tag eingestellt. Schließen beendet das Mikrofon. Der Live-Assistent löst keine Aufträge, Termine oder Nachrichten aus und überträgt seine Gesprächsdaten nicht in die Prozessdemo. Für die übrige Prozessdemo bitte Beispieldaten verwenden. Fahrrad, Problem, Ort und Zeitwunsch gehen zur Sprachvorbereitung an diesen Server und bei verbundener Vertonung an ElevenLabs. Telefonnummer, Fotos und Standortkoordinaten werden nicht weitergegeben. Der Server hält die Sprachdatei höchstens 15 Minuten im Arbeitsspeicher. Für die Verarbeitung bei ElevenLabs gelten deren Datenschutzbedingungen. Es gibt keine Telefonverbindung zu Tom, Nachrichten, Kalendereinträge oder Zahlungen. Neustart verwirft den Seitenzustand; bereits übermittelte Angaben lassen sich damit nicht zurückholen."
+      ? "Beim ersten Live-Gespräch verarbeitet ElevenLabs deine Sprache und Gesprächsangaben. Der Assistent ergänzt die Gesprächsangaben während des Anrufs als kurze Zusammenfassung in der Telegram-Demokarte dieser Webseite. Deine mündliche Bestätigung schließt die Anfrage ab. Beim interaktiven Rückruf übermitteln wir die von dir bestätigten Angaben zu Fahrrad, Problem, Ort, Zeitwunsch und Zusatzdetails erneut an ElevenLabs und den Sprachmodell-Anbieter. Die Rückrufnummer, Fotos und Standortkoordinaten werden dabei nicht übertragen. Audioaufzeichnung ist deaktiviert; die Aufbewahrungsfrist für Gesprächsdaten ist auf einen Tag eingestellt. Schließen beendet das Mikrofon. Ein mündlich bestätigter Termin wird nur in dieser Browser-Demo markiert; es gibt keine echten Anrufe, Nachrichten, Kalendereinträge oder Zahlungen. Neustart verwirft den Seitenzustand, nicht bereits übermittelte Gesprächsdaten."
       : "Anbietername, Anschrift und Kontakt sind noch zu ergänzen. Diese Vorschau enthält keine erfundenen Unternehmensdaten und ist noch kein öffentliches Leistungsangebot.";
     $("#dialog-content").replaceChildren(title, p);
     dialog.showModal();
@@ -910,17 +947,6 @@ const details = $("#voice-player details");
 const description = details.querySelector("p");
 description.id = "voice-description";
 details.querySelector("p:last-child").id = "voice-transcript";
-const confirmVisit = document.createElement("button");
-confirmVisit.type = "button";
-confirmVisit.id = "confirm-visit";
-confirmVisit.className = "button secondary";
-confirmVisit.textContent = "Ja, das passt · Termin bestätigen ✓";
-confirmVisit.hidden = true;
-$("#voice-player").after(confirmVisit);
-// A text alternative also lets visitors confirm without listening.
-confirmVisit.addEventListener("click", () => {
-  if (state.phase === "awaiting-confirmation") book(state.proposedTime);
-});
 $("#story").prepend($(".demo-toolbar"));
 reset();
 new ResizeObserver(drawThread).observe($("#story"));

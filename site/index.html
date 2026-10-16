@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
     <script src="voice-agent.js" defer></script>
+    <script src="callback-voice.js" defer></script>
   </head>
   <body>
     <a class="skip" href="#main">Zum Inhalt</a>
@@ -482,31 +483,47 @@
                         <p id="live-voice-status" role="status" aria-live="polite"></p>
                         <button class="button subtle" id="show-phone-example">Beispiel ohne Mikrofon</button>
                       </div>
-                      <div id="phone-example" hidden>
+                      <form id="phone-example" hidden>
                       <div class="phone-assistant">
                         <svg><use href="#helper" /></svg>
                         <h4>„Servus! Was fehlt deinem Rad?“</h4>
                       </div>
-                      <p class="tiny">Beispielgespräch</p>
+                      <p class="tiny">Beispielgespräch · Deine Testangaben bleiben bis zum Rückruf erhalten.</p>
+                      <div id="phone-spoken-wrap" hidden>
+                        <p class="tiny">Erkannte Worte aus dem Testanruf:</p>
+                        <p id="phone-transcript" class="phone-transcript"></p>
+                        <p class="tiny">Trage Fahrrad, Problem, Ort und Zeit unten ein. Weitere wichtige Details kannst du kurz für Tom zusammenfassen.</p>
+                      </div>
+                      <label for="phone-spoken">Weitere wichtige Details <span class="optional">optional</span></label>
+                      <textarea id="phone-spoken" name="callNotes" rows="2" maxlength="500" placeholder="z. B. Hinterrad betroffen, Rad ist nicht fahrbereit"></textarea>
                       <div class="conversation">
                         <p><b>Assistent</b> Was für ein Fahrrad hast du?</p>
                         <p class="caller">
-                          <b>Kundin</b> Ein Lastenrad. Der Reifen ist platt.
+                          <b>Kundin</b>
+                          <label for="phone-bike">Fahrrad</label>
+                          <select id="phone-bike" name="bike"><option>Lastenrad</option><option>E-Bike</option><option>Fahrrad</option></select>
+                          <label for="phone-issue">Problem</label>
+                          <select id="phone-issue" name="issue"><option>Platter Reifen</option><option>Bremse schleift</option><option>Schaltung hakt</option><option>Service & Check</option></select>
                         </p>
                         <p><b>Assistent</b> Wo steht es und wann passt es?</p>
                         <p class="caller">
-                          <b>Kundin</b> Am Marktplatz in Innsbruck. Heute, wenn
-                          möglich.
+                          <b>Kundin</b>
+                          <label for="phone-location">Ort oder Postleitzahl</label>
+                          <input id="phone-location" name="location" value="6020 Innsbruck, am Marktplatz" maxlength="140" required />
+                          <label for="phone-time">Zeitwunsch</label>
+                          <select id="phone-time" name="time"><option>Heute, wenn möglich</option><option>Dienstag, 15–17 Uhr</option><option>Mittwoch, 15–17 Uhr</option><option>Donnerstag, 15–17 Uhr</option><option>Nach Absprache</option></select>
+                          <label for="phone-number">Demo-Telefonnummer</label>
+                          <input id="phone-number" name="phone" type="tel" value="+1 202 555 0123" maxlength="30" pattern="\+1 202 555 01[0-9]{2}" required />
                         </p>
                         <p>
                           <b>Assistent</b> Alles klar. Tom schaut sich deine
                           Anfrage an und du bekommst einen Rückruf.
                         </p>
                       </div>
-                      <button class="button primary" id="send-phone">
+                      <button class="button primary" id="send-phone" type="submit">
                         Gespräch an Tom übergeben →
                       </button>
-                      </div>
+                      </form>
                     </div>
                   </div>
                   <div id="intake-receipt" hidden>
@@ -632,6 +649,7 @@
                         <b id="order-status">Reparaturanfrage</b
                         ><span id="source-label">Website</span>
                       </div>
+                      <p class="tiny">Anfrage im Überblick</p>
                       <h4 id="summary-title">Lastenrad · Platter Reifen</h4>
                       <dl>
                         <dt>Standort</dt>
@@ -643,6 +661,7 @@
                         <dt>Rückruf</dt>
                         <dd id="summary-phone">+1 202 555 0123</dd>
                       </dl>
+                      <p id="summary-spoken" hidden></p>
                       <div id="summary-map"></div>
                       <img
                         id="summary-photo"
@@ -713,9 +732,10 @@
         <section class="story-row callback-row" id="rueckruf">
           <div class="story-cell left">
             <p class="step-label" data-thread="left">04 · Der Rückruf</p>
-            <h3>„Ah, ich bekomme schon einen Rückruf!“</h3>
+            <h3 id="callback-heading">„Ah, ich bekomme schon einen Rückruf!“</h3>
             <div class="callback-card">
               <div id="callback-idle"></div>
+              <p id="personal-note" hidden>Tom meldet sich persönlich. Den Termin besprecht ihr direkt im Gespräch.</p>
               <div id="callback-live" hidden>
                 <div class="call-identity">
                   <svg id="callback-avatar"><use href="#helper" /></svg>
@@ -725,6 +745,21 @@
                   </div>
                 </div>
                 <p id="callback-transcript"></p>
+                <p id="callback-spoken" hidden></p>
+                <div id="callback-conversation" hidden>
+                  <div id="callback-start">
+                    <p class="callback-invite">Toms Assistent ruft dich zurück.</p>
+                    <button class="button primary" id="answer-callback" type="button">Rückruf annehmen</button>
+                    <p class="tiny">Sprich danach direkt mit ihm über deinen Termin.</p>
+                    <p id="callback-result" role="status" aria-live="polite"></p>
+                  </div>
+                  <div id="callback-active" hidden>
+                    <div class="voice-orb"><canvas id="callback-canvas" aria-hidden="true"></canvas></div>
+                    <p id="callback-call-status" role="status" aria-live="polite">Verbindung wird aufgebaut …</p>
+                    <button class="voice-toggle" id="end-callback" type="button"><svg class="inline-icon" aria-hidden="true"><use href="#handset"/></svg> Gespräch beenden</button>
+                    <button class="voice-mute" id="mute-callback" type="button" hidden aria-pressed="false">Mikrofon stummschalten</button>
+                  </div>
+                </div>
                 <div id="voice-player" hidden>
                   <button class="button primary" id="play-callback">
                     ▶ Rückruf anhören</button
@@ -746,12 +781,6 @@
                       SMS und eine Erinnerung eine Stunde vorher. Bis bald!
                     </p>
                   </details>
-                </div>
-                <div id="personal-call" hidden>
-                  <span class="call-pulse">☎</span
-                  ><button class="button primary" id="answer-call">
-                    Anruf annehmen
-                  </button>
                 </div>
                 <form id="choose-slot" hidden>
                   <fieldset>
@@ -880,7 +909,7 @@
                 Nach der Reparatur bestätigt Tom den tatsächlichen Betrag. Dann
                 kann die Kundin bezahlen.
               </p>
-              <p class="payment-methods"><strong>Kreditkarte über Stripe oder bar.</strong><br />Wir richten dein Zahlungssystem ein, damit du direkt vor Ort kassieren kannst.</p>
+              <p class="payment-methods"><strong>Vor Ort mit SumUp Solo oder bar bezahlen.</strong><br />Wir begleiten die Anmeldung, richten das Solo ein und testen mit dir den Zahlungsablauf. Barzahlungen, Belege und die Übergabe an deine Buchhaltung bereiten wir gemeinsam vor.</p>
               <div id="checkout" hidden>
                 <p id="checkout-amount"></p>
                 <button class="button primary" id="pay">
@@ -891,9 +920,7 @@
                 <div class="receipt-check">✓</div>
                 <h4>Zahlung erledigt.</h4>
                 <p id="paid-amount"></p>
-                <span class="integration"
-                  ><b class="stripe-word">stripe</b> Zahlung erledigt</span
-                >
+                <span class="integration">SumUp Solo · Beispielzahlung</span>
               </div>
             </div>
           </div>
@@ -903,7 +930,7 @@
               Weniger Papierkram.<br />Mehr Überblick.
             </h3>
             <p id="completion-detail">
-              Auftrag, Zahlung und Beleg gehören zusammen. Kartenzahlungen laufen über Stripe; Barzahlungen werden im Auftrag erfasst. Wir richten die Ablage und den Export so ein, dass du die Unterlagen einfacher an deine Buchhaltung oder deinen Steuerberater übergeben kannst.
+              Auftrag, Zahlung und Beleg gehören zusammen. Wir helfen dir beim Einrichten von SumUp Solo, beim Erfassen von Barzahlungen und beim Vorbereiten der Unterlagen für deine Buchhaltung. Die Identitätsprüfung bei SumUp und die Wahl einer passenden Kassenlösung erfolgen mit dir und deinem Steuerberater.
             </p>
             <button class="button primary" data-contact>So möchte ich arbeiten</button>
 
@@ -975,7 +1002,7 @@
             <h3>Die Technik<br />läuft mit.</h3>
             <p>
               Einrichtung und laufende technische Betreuung deiner
-              Infrastruktur. Kalender, Stripe für Kartenzahlungen vor Ort und die Erfassung von Barzahlungen – mit geordneten Belegen für deine Buchhaltung.
+              Infrastruktur. Kalender, SumUp Solo für Kartenzahlungen vor Ort, Barzahlungserfassung und geordnete Belege für deine Buchhaltung.
             </p>
           </article>
         </div>

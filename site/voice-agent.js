@@ -19,6 +19,20 @@
   let orb = null;
   let volumes = null;
   let sdk = null;
+  let spokenTurns = [];
+  let liveRequest = null;
+  let requestConfirmed = false;
+
+  function offerTranscript() {
+    if (liveRequest) {
+      document.dispatchEvent(new CustomEvent("demo:call-finished", { detail: { confirmed: requestConfirmed } }));
+      if (requestConfirmed) return;
+    }
+    if (!spokenTurns.length) return;
+    document.querySelector("#phone-transcript").textContent = spokenTurns.join(" ").slice(0, 8000);
+    document.querySelector("#phone-spoken-wrap").hidden = false;
+    document.querySelector("#phone-example").hidden = false;
+  }
 
   function disposeOrb() {
     clearInterval(volumes);
@@ -42,8 +56,10 @@
     disposeOrb();
   }
 
-  async function stop(message = "Gespräch beendet.") {
+  async function stop(message = "Gespräch beendet.", preserveTranscript = true) {
     attempt++;
+    if (preserveTranscript) offerTranscript();
+    else { spokenTurns = []; liveRequest = null; requestConfirmed = false; }
     const previous = session;
     session = null;
     idle(message);
@@ -90,6 +106,9 @@
     if (session || connecting) return;
     document.querySelector("#callback-audio")?.pause();
     const current = ++attempt;
+    spokenTurns = [];
+    liveRequest = null;
+    requestConfirmed = false;
     connecting = true;
     intro.hidden = true;
     live.hidden = false;
@@ -109,6 +128,26 @@
       const created = await client.Conversation.startSession({
         agentId: "agent_2501m4t5qbemfxvswmg7fyzxzd3c",
         connectionType: "websocket",
+        clientTools: {
+          update_demo_request: async (data) => {
+            if (attempt !== current) return { success: false, reason: "Gespräch nicht mehr aktiv" };
+            if (!data || typeof data !== "object") return { success: false, reason: "Angaben fehlen" };
+            const clean = (key, limit) => typeof data[key] === "string" ? data[key].trim().slice(0, limit) : "";
+            liveRequest = {
+              bike: clean("bike", 140) || "Noch offen",
+              issue: clean("issue", 300) || "Noch offen",
+              location: clean("location", 200) || "Noch offen",
+              time: clean("time", 140) || "Noch offen",
+              phone: clean("phone", 50) || clean("contact", 160) || "Rückrufkontakt noch offen",
+              callNotes: clean("callNotes", 1200),
+            };
+            requestConfirmed = data.confirmed === true;
+            document.dispatchEvent(new CustomEvent("demo:call-request", {
+              detail: { request: liveRequest, confirmed: requestConfirmed },
+            }));
+            return { success: true, scope: "browser_demo_only", confirmed: requestConfirmed };
+          },
+        },
         onConnect: () => {
           if (attempt !== current) return;
           label.textContent = "Gespräch beenden";
@@ -121,9 +160,14 @@
         },
         onDisconnect: () => {
           if (attempt !== current) return;
+          offerTranscript();
           session = null;
           attempt++;
           idle("Gespräch beendet.");
+        },
+        onMessage: ({ source, message }) => {
+          if (attempt === current && source === "user" && typeof message === "string" && message.trim())
+            spokenTurns.push(message.trim());
         },
         onError: () => {
           if (attempt === current) void stop("Verbindung unterbrochen. Bitte versuche es noch einmal.");
@@ -156,7 +200,8 @@
   document.addEventListener("demo:channel", event => {
     if (event.detail !== "phone") void stop("");
   });
-  document.addEventListener("demo:reset", () => { void stop(""); });
+  document.addEventListener("demo:operator-action", () => { if (session || connecting) void stop(); });
+  document.addEventListener("demo:reset", () => { void stop("", false); });
   document.querySelector("#show-phone-example").addEventListener("click", () => { void stop(); });
   window.addEventListener("pagehide", () => { void stop(); });
 })();
